@@ -94,7 +94,7 @@ function Examinations() {
                 <div className="text-xs uppercase tracking-wider text-muted-foreground">
                   KCG · Examinations Cell
                 </div>
-                <h2 className="font-display text-2xl font-semibold mt-1">Hall Ticket</h2>
+                <h2 className="font-display text-2xl font-semibold mt-1">Sample Hall Ticket</h2>
                 <div className="text-sm text-muted-foreground mt-1">
                   Mid-Semester Examination · June 2026
                 </div>
