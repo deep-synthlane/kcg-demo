@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { FileText, Film, Presentation, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,7 +28,18 @@ function typeIcon(t: string) {
 }
 
 function ContentReview() {
-  const reviewItems = CONTENT_ITEMS.filter((c) => c.status === "Review");
+  const [items, setItems] = useState(CONTENT_ITEMS.map((c) => ({ ...c })));
+  const reviewItems = items.filter((c) => c.status === "Review");
+
+  function handleApprove(id: string) {
+    setItems((prev) => prev.map((c) => c.id === id ? { ...c, status: "Published" } : c));
+    toast.success("Approved — content is now published");
+  }
+
+  function handleRequestChanges(id: string) {
+    setItems((prev) => prev.map((c) => c.id === id ? { ...c, status: "Draft" } : c));
+    toast.success("Feedback sent to faculty — moved back to Draft");
+  }
 
   return (
     <div className="space-y-6">
@@ -71,7 +83,7 @@ function ContentReview() {
                         size="sm"
                         variant="outline"
                         className="text-success border-success/40"
-                        onClick={() => toast("Approved — content is now published")}
+                        onClick={() => handleApprove(c.id)}
                       >
                         Approve
                       </Button>
@@ -79,7 +91,7 @@ function ContentReview() {
                         size="sm"
                         variant="outline"
                         className="text-warning-foreground border-warning/40"
-                        onClick={() => toast("Feedback sent to faculty")}
+                        onClick={() => handleRequestChanges(c.id)}
                       >
                         Request Changes
                       </Button>
@@ -91,7 +103,7 @@ function ContentReview() {
             {reviewItems.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                  No content pending review.
+                  No content pending review. All items have been processed.
                 </TableCell>
               </TableRow>
             )}

@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Calendar as CalIcon, BookCopy, GraduationCap } from "lucide-react";
+import { useState } from "react";
+import { Calendar as CalIcon, BookCopy, GraduationCap, Plus, Trash2 } from "lucide-react";
+import { useCalendar, type CalEvent } from "@/lib/calendarStore";
 import {
   Tabs,
   TabsContent,
@@ -7,22 +9,44 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PageHeader } from "@/components/RoleShell";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/curriculum")({
   head: () => ({ meta: [{ title: "Curriculum & Calendar · KCG" }] }),
   component: Curriculum,
 });
 
-const PROGRAMS = [
+
+type Program = { code: string; duration: string; courses: number; electives: number; sem: number };
+
+const INITIAL_PROGRAMS: Program[] = [
   { code: "B.Tech CSE", duration: "4 yrs", courses: 48, electives: 12, sem: 8 },
   { code: "B.Tech ECE", duration: "4 yrs", courses: 46, electives: 10, sem: 8 },
   { code: "MBA", duration: "2 yrs", courses: 24, electives: 8, sem: 4 },
   { code: "B.Sc Data Science", duration: "3 yrs", courses: 36, electives: 9, sem: 6 },
 ];
 
-const ELECTIVES = [
+type Elective = { name: string; dept: string; capacity: number; enrolled: number };
+
+const INITIAL_ELECTIVES: Elective[] = [
   { name: "Quantum Computing", dept: "CSE", capacity: 60, enrolled: 54 },
   { name: "Blockchain & Web3", dept: "CSE", capacity: 80, enrolled: 72 },
   { name: "Generative AI Studio", dept: "CSE", capacity: 90, enrolled: 88 },
@@ -30,17 +54,86 @@ const ELECTIVES = [
   { name: "Behavioural Finance", dept: "MBA", capacity: 40, enrolled: 36 },
 ];
 
-const CAL_EVENTS: Record<number, { label: string; type: "exam" | "holiday" | "event" }> = {
-  3: { label: "Convocation", type: "event" },
-  10: { label: "Founders' Day", type: "holiday" },
-  18: { label: "Mid-Sem Begin", type: "exam" },
-  19: { label: "Mid-Sem", type: "exam" },
-  20: { label: "Mid-Sem", type: "exam" },
-  21: { label: "Mid-Sem", type: "exam" },
-  24: { label: "Hackathon", type: "event" },
-};
-
 function Curriculum() {
+  const { events, addEvent, deleteEvent } = useCalendar();
+  const [programs, setPrograms] = useState<Program[]>(INITIAL_PROGRAMS);
+  const [electives, setElectives] = useState<Elective[]>(INITIAL_ELECTIVES);
+
+  // Calendar dialogs
+  const [addEventDialog, setAddEventDialog] = useState(false);
+  const [editDay, setEditDay] = useState<number | null>(null);
+  const [eventLabel, setEventLabel] = useState("");
+  const [eventType, setEventType] = useState<CalEvent["type"]>("event");
+
+  // Program dialog
+  const [addProgramDialog, setAddProgramDialog] = useState(false);
+  const [progCode, setProgCode] = useState("");
+  const [progDuration, setProgDuration] = useState("4 yrs");
+  const [progCourses, setProgCourses] = useState("40");
+  const [progElectives, setProgElectives] = useState("10");
+  const [progSem, setProgSem] = useState("8");
+
+  // Elective dialog
+  const [addElectiveDialog, setAddElectiveDialog] = useState(false);
+  const [electName, setElectName] = useState("");
+  const [electDept, setElectDept] = useState("");
+  const [electCapacity, setElectCapacity] = useState("60");
+
+  function handleSaveEvent() {
+    if (!eventLabel.trim() || editDay === null) return;
+    addEvent(editDay, { label: eventLabel, type: eventType });
+    toast.success(`Event "${eventLabel}" saved on day ${editDay}`);
+    setAddEventDialog(false);
+    setEditDay(null);
+    setEventLabel("");
+  }
+
+  function handleDeleteEvent(day: number) {
+    deleteEvent(day);
+    toast.success("Event deleted");
+  }
+
+  function openAddEvent(day?: number) {
+    if (day && events[day]) {
+      setEventLabel(events[day].label);
+      setEventType(events[day].type);
+    } else {
+      setEventLabel("");
+      setEventType("event");
+    }
+    setEditDay(day ?? 1);
+    setAddEventDialog(true);
+  }
+
+  function handleAddProgram() {
+    if (!progCode.trim()) return;
+    setPrograms((prev) => [...prev, {
+      code: progCode,
+      duration: progDuration,
+      courses: parseInt(progCourses) || 40,
+      electives: parseInt(progElectives) || 10,
+      sem: parseInt(progSem) || 8,
+    }]);
+    toast.success(`Program "${progCode}" created`);
+    setAddProgramDialog(false);
+    setProgCode("");
+  }
+
+  function handleAddElective() {
+    if (!electName.trim() || !electDept.trim()) return;
+    setElectives((prev) => [...prev, {
+      name: electName,
+      dept: electDept,
+      capacity: parseInt(electCapacity) || 60,
+      enrolled: 0,
+    }]);
+    toast.success(`Elective "${electName}" added`);
+    setAddElectiveDialog(false);
+    setElectName("");
+    setElectDept("");
+    setElectCapacity("60");
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -61,6 +154,7 @@ function Curriculum() {
           </TabsTrigger>
         </TabsList>
 
+        {/* --- ACADEMIC CALENDAR --- */}
         <TabsContent value="calendar">
           <div className="rounded-xl border bg-card p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
@@ -68,10 +162,16 @@ function Curriculum() {
                 <h3 className="font-semibold">June 2026</h3>
                 <p className="text-xs text-muted-foreground">Semester 6 · Even Term</p>
               </div>
-              <div className="flex gap-2 text-xs">
-                <Legend tone="exam" label="Exams" />
-                <Legend tone="holiday" label="Holiday" />
-                <Legend tone="event" label="Event" />
+              <div className="flex items-center gap-3">
+                <div className="flex gap-2 text-xs">
+                  <Legend tone="exam" label="Exams" />
+                  <Legend tone="holiday" label="Holiday" />
+                  <Legend tone="event" label="Event" />
+                  <Legend tone="fest" label="Fest" />
+                </div>
+                <Button size="sm" onClick={() => openAddEvent()}>
+                  <Plus className="h-3.5 w-3.5 mr-1" /> Add Event
+                </Button>
               </div>
             </div>
             <div className="grid grid-cols-7 gap-1 text-center text-xs">
@@ -82,21 +182,31 @@ function Curriculum() {
               ))}
               {Array.from({ length: 30 }).map((_, i) => {
                 const day = i + 1;
-                const ev = CAL_EVENTS[day];
+                const ev = events[day];
                 return (
                   <div
                     key={day}
+                    onClick={() => openAddEvent(day)}
                     className={cn(
-                      "aspect-square rounded-md border p-1.5 flex flex-col text-left",
+                      "aspect-square rounded-md border p-1.5 flex flex-col text-left cursor-pointer hover:ring-2 hover:ring-primary/30 transition group relative",
                       ev?.type === "exam" && "bg-destructive/10 border-destructive/30",
                       ev?.type === "holiday" && "bg-warning/15 border-warning/30",
                       ev?.type === "event" && "bg-primary/10 border-primary/30",
+                      ev?.type === "fest" && "bg-violet-500/10 border-violet-500/30",
                       !ev && "bg-card hover:bg-muted/40",
                     )}
                   >
                     <div className="font-medium">{day}</div>
                     {ev && (
-                      <div className="text-[10px] mt-auto leading-tight truncate">{ev.label}</div>
+                      <>
+                        <div className="text-[10px] mt-auto leading-tight truncate">{ev.label}</div>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleDeleteEvent(day); }}
+                          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition rounded-sm bg-destructive/80 text-white p-0.5"
+                        >
+                          <Trash2 className="h-2.5 w-2.5" />
+                        </button>
+                      </>
                     )}
                   </div>
                 );
@@ -105,9 +215,15 @@ function Curriculum() {
           </div>
         </TabsContent>
 
+        {/* --- PROGRAMS --- */}
         <TabsContent value="programs">
+          <div className="flex justify-end mb-4">
+            <Button size="sm" onClick={() => setAddProgramDialog(true)}>
+              <Plus className="h-3.5 w-3.5 mr-1" /> Create Program
+            </Button>
+          </div>
           <div className="grid gap-4 md:grid-cols-2">
-            {PROGRAMS.map((p) => (
+            {programs.map((p) => (
               <div key={p.code} className="rounded-xl border bg-card p-5 shadow-sm">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{p.code}</h3>
@@ -123,7 +239,13 @@ function Curriculum() {
           </div>
         </TabsContent>
 
+        {/* --- ELECTIVES --- */}
         <TabsContent value="electives">
+          <div className="flex justify-end mb-4">
+            <Button size="sm" onClick={() => setAddElectiveDialog(true)}>
+              <Plus className="h-3.5 w-3.5 mr-1" /> Add Elective
+            </Button>
+          </div>
           <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
             <table className="w-full text-sm">
               <thead>
@@ -135,7 +257,7 @@ function Curriculum() {
                 </tr>
               </thead>
               <tbody>
-                {ELECTIVES.map((e) => {
+                {electives.map((e) => {
                   const pct = Math.round((e.enrolled / e.capacity) * 100);
                   return (
                     <tr key={e.name} className="border-t">
@@ -160,11 +282,122 @@ function Curriculum() {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Add/Edit Event Dialog */}
+      <Dialog open={addEventDialog} onOpenChange={setAddEventDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{events[editDay ?? 0] ? "Edit Event" : "Add Event"} — Day {editDay}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Event Title</Label>
+              <Input value={eventLabel} onChange={(e) => setEventLabel(e.target.value)} placeholder="e.g. Foundation Day" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Type</Label>
+              <Select value={eventType} onValueChange={(v) => setEventType(v as CalEvent["type"])}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="exam">Exam</SelectItem>
+                  <SelectItem value="holiday">Holiday</SelectItem>
+                  <SelectItem value="event">Event</SelectItem>
+                  <SelectItem value="fest">Fest</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Day of Month</Label>
+              <Input type="number" min={1} max={30} value={editDay ?? ""} onChange={(e) => setEditDay(parseInt(e.target.value) || 1)} />
+            </div>
+            <Button className="w-full" onClick={handleSaveEvent}>Save Event</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Program Dialog */}
+      <Dialog open={addProgramDialog} onOpenChange={setAddProgramDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Create Program</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Program Name</Label>
+              <Input value={progCode} onChange={(e) => setProgCode(e.target.value)} placeholder="e.g. B.Tech AI & ML" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs">Duration</Label>
+                <Select value={progDuration} onValueChange={setProgDuration}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2 yrs">2 yrs</SelectItem>
+                    <SelectItem value="3 yrs">3 yrs</SelectItem>
+                    <SelectItem value="4 yrs">4 yrs</SelectItem>
+                    <SelectItem value="5 yrs">5 yrs</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Semesters</Label>
+                <Input type="number" value={progSem} onChange={(e) => setProgSem(e.target.value)} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs">Core Courses</Label>
+                <Input type="number" value={progCourses} onChange={(e) => setProgCourses(e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Electives</Label>
+                <Input type="number" value={progElectives} onChange={(e) => setProgElectives(e.target.value)} />
+              </div>
+            </div>
+            <Button className="w-full" onClick={handleAddProgram}>Create Program</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Elective Dialog */}
+      <Dialog open={addElectiveDialog} onOpenChange={setAddElectiveDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Add Elective</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Elective Name</Label>
+              <Input value={electName} onChange={(e) => setElectName(e.target.value)} placeholder="e.g. IoT Systems" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs">Department</Label>
+                <Select value={electDept} onValueChange={setElectDept}>
+                  <SelectTrigger><SelectValue placeholder="Dept" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="CSE">CSE</SelectItem>
+                    <SelectItem value="ECE">ECE</SelectItem>
+                    <SelectItem value="MECH">MECH</SelectItem>
+                    <SelectItem value="MBA">MBA</SelectItem>
+                    <SelectItem value="CIVIL">CIVIL</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Capacity</Label>
+                <Input type="number" value={electCapacity} onChange={(e) => setElectCapacity(e.target.value)} />
+              </div>
+            </div>
+            <Button className="w-full" onClick={handleAddElective}>Add Elective</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
-function Legend({ tone, label }: { tone: "exam" | "holiday" | "event"; label: string }) {
+function Legend({ tone, label }: { tone: "exam" | "holiday" | "event" | "fest"; label: string }) {
   return (
     <div className="flex items-center gap-1.5">
       <span
@@ -173,6 +406,7 @@ function Legend({ tone, label }: { tone: "exam" | "holiday" | "event"; label: st
           tone === "exam" && "bg-destructive/60",
           tone === "holiday" && "bg-warning",
           tone === "event" && "bg-primary",
+          tone === "fest" && "bg-violet-500",
         )}
       />
       <span className="text-muted-foreground">{label}</span>

@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Users, GraduationCap, BookOpen, FileSpreadsheet } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Users, GraduationCap, BookOpen, FileSpreadsheet, AlertCircle, Calendar } from "lucide-react";
 import {
   AreaChart,
   Area,
@@ -15,12 +15,17 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { PageHeader, StatCard } from "@/components/RoleShell";
 import {
   ADMIN_KPIS,
   ATTENDANCE_TREND,
   ENROLLMENT_BY_DEPT,
   FEE_COLLECTION,
+  EXAM_SCHEDULE,
+  APPLICATIONS,
+  COURSES,
 } from "@/lib/mockData";
 
 export const Route = createFileRoute("/admin/dashboard")({
@@ -30,6 +35,8 @@ export const Route = createFileRoute("/admin/dashboard")({
 
 const FEE_COLORS = ["var(--color-chart-5)", "var(--color-chart-3)", "var(--color-chart-4)"];
 
+const pendingAdmissions = APPLICATIONS.filter((a) => a.status === "Pending Review").length;
+
 function AdminDashboard() {
   return (
     <div className="space-y-6">
@@ -38,7 +45,7 @@ function AdminDashboard() {
         subtitle="Live snapshot of academic operations across campuses"
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard
           label="Total Students"
           value={ADMIN_KPIS.students.toLocaleString()}
@@ -65,6 +72,13 @@ function AdminDashboard() {
           icon={FileSpreadsheet}
           tone="warning"
           hint="Next 30 days"
+        />
+        <StatCard
+          label="Pending Admissions"
+          value={pendingAdmissions}
+          icon={AlertCircle}
+          tone="destructive"
+          hint="Awaiting review"
         />
       </div>
 
@@ -146,6 +160,51 @@ function AdminDashboard() {
                   <span>{f.name}</span>
                 </div>
                 <span className="font-medium">{f.value}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Exam schedule + Course summary */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div className="rounded-xl border bg-card p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-primary" /> Upcoming Exams
+            </h3>
+            <Button size="sm" variant="ghost" asChild>
+              <Link to="/admin/examinations">View all</Link>
+            </Button>
+          </div>
+          <div className="space-y-2">
+            {EXAM_SCHEDULE.slice(0, 5).map((e) => (
+              <div key={e.id} className="flex items-center justify-between gap-3 rounded-lg border p-3">
+                <div className="min-w-0">
+                  <div className="text-sm font-medium truncate">{e.course}</div>
+                  <div className="text-xs text-muted-foreground">{e.date} · {e.session} · {e.hall}</div>
+                </div>
+                <Badge variant="outline" className="shrink-0 text-xs">{e.invigilator}</Badge>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-xl border bg-card p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold flex items-center gap-2">
+              <BookOpen className="h-4 w-4 text-primary" /> Course Summary
+            </h3>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {COURSES.slice(0, 6).map((c) => (
+              <div key={c.id} className="rounded-lg border p-3">
+                <div className="text-xs text-muted-foreground">{c.code}</div>
+                <div className="text-sm font-medium mt-0.5 truncate">{c.title}</div>
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-xs text-muted-foreground">{c.students} students</span>
+                  <Badge variant="outline" className="text-[10px]">{c.progress}%</Badge>
+                </div>
               </div>
             ))}
           </div>

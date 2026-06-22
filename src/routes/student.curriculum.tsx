@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/RoleShell";
 import { STUDENT_CURRICULUM } from "@/lib/mockData";
+import { useCalendar } from "@/lib/calendarStore";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/student/curriculum")({
@@ -18,17 +19,8 @@ export const Route = createFileRoute("/student/curriculum")({
 
 const CURRENT_SEM = 6;
 
-const CAL_EVENTS: Record<number, { label: string; type: "exam" | "holiday" | "event" }> = {
-  3: { label: "Convocation", type: "event" },
-  10: { label: "Founders' Day", type: "holiday" },
-  18: { label: "Mid-Sem Begin", type: "exam" },
-  19: { label: "Mid-Sem", type: "exam" },
-  20: { label: "Mid-Sem", type: "exam" },
-  21: { label: "Mid-Sem", type: "exam" },
-  24: { label: "Hackathon", type: "event" },
-};
-
 function StudentCurriculum() {
+  const { events: CAL_EVENTS } = useCalendar();
   return (
     <div className="space-y-6">
       <PageHeader title="Curriculum & Calendar" subtitle="B.Tech CSE — Semester-wise courses and academic calendar" />
@@ -117,6 +109,7 @@ function StudentCurriculum() {
                 <Legend tone="exam" label="Exams" />
                 <Legend tone="holiday" label="Holiday" />
                 <Legend tone="event" label="Event" />
+                <Legend tone="fest" label="Fest" />
               </div>
             </div>
             <div className="grid grid-cols-7 gap-1 text-center text-xs">
@@ -134,6 +127,7 @@ function StudentCurriculum() {
                       ev?.type === "exam" && "bg-destructive/10 border-destructive/30",
                       ev?.type === "holiday" && "bg-warning/15 border-warning/30",
                       ev?.type === "event" && "bg-primary/10 border-primary/30",
+                      ev?.type === "fest" && "bg-violet-500/10 border-violet-500/30",
                       !ev && "bg-card hover:bg-muted/40",
                     )}
                   >
@@ -150,7 +144,7 @@ function StudentCurriculum() {
   );
 }
 
-function Legend({ tone, label }: { tone: "exam" | "holiday" | "event"; label: string }) {
+function Legend({ tone, label }: { tone: "exam" | "holiday" | "event" | "fest"; label: string }) {
   return (
     <div className="flex items-center gap-1.5">
       <span
@@ -159,6 +153,7 @@ function Legend({ tone, label }: { tone: "exam" | "holiday" | "event"; label: st
           tone === "exam" && "bg-destructive/60",
           tone === "holiday" && "bg-warning",
           tone === "event" && "bg-primary",
+          tone === "fest" && "bg-violet-500",
         )}
       />
       <span className="text-muted-foreground">{label}</span>

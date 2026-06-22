@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/RoleShell";
 import { LIVE_CLASSES, RECORDINGS } from "@/lib/mockData";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/student/live-classes")({
   head: () => ({ meta: [{ title: "Live Classes · KCG" }] }),
@@ -25,6 +26,20 @@ const ATTENDANCE = [
   { date: "14 Jun", session: "DS · Linked Lists", status: "Present", duration: "55 min" },
 ];
 
+const WEEK_SCHEDULE = [
+  { day: "Mon", sessions: [{ time: "10:00", title: "DS · Arrays", platform: "Meet" }] },
+  { day: "Tue", sessions: [{ time: "14:00", title: "DBMS · Normalization", platform: "Teams" }] },
+  { day: "Wed", sessions: [{ time: "10:30", title: "AI · RL Intro", platform: "Teams" }] },
+  { day: "Thu", sessions: [{ time: "15:00", title: "DBMS · Joins Deep Dive", platform: "Meet" }, { time: "11:00", title: "OS · Scheduling", platform: "Meet" }] },
+  { day: "Fri", sessions: [{ time: "09:00", title: "DS · Trees", platform: "Meet" }] },
+  { day: "Sat", sessions: [] },
+];
+
+function handleJoin(title: string) {
+  toast.success(`Joining "${title}" — opening meeting link`);
+  window.open("https://meet.google.com/kcg-demo-class", "_blank");
+}
+
 function LiveClassesPage() {
   return (
     <div className="space-y-6">
@@ -33,10 +48,37 @@ function LiveClassesPage() {
         subtitle="Join scheduled sessions, review recordings, track attendance"
       />
 
+      {/* Weekly calendar view */}
+      <div className="rounded-xl border bg-card p-5 shadow-sm">
+        <h2 className="font-semibold mb-3 flex items-center gap-2">
+          <Calendar className="h-4 w-4 text-primary" /> This Week's Schedule
+        </h2>
+        <div className="grid grid-cols-6 gap-2">
+          {WEEK_SCHEDULE.map((d) => (
+            <div key={d.day} className="rounded-lg border p-3 min-h-[120px]">
+              <div className="text-xs font-semibold text-muted-foreground mb-2">{d.day}</div>
+              {d.sessions.length === 0 ? (
+                <div className="text-xs text-muted-foreground/50 italic">No class</div>
+              ) : (
+                <div className="space-y-2">
+                  {d.sessions.map((s) => (
+                    <div key={s.time + s.title} className="rounded-md bg-primary/10 border border-primary/20 p-2">
+                      <div className="text-[10px] text-muted-foreground">{s.time}</div>
+                      <div className="text-xs font-medium mt-0.5 leading-tight">{s.title}</div>
+                      <Badge variant="outline" className="mt-1 text-[9px]">{s.platform}</Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Upcoming sessions */}
       <div>
         <h2 className="font-display text-lg font-semibold mb-3 flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-primary" /> Upcoming Sessions
+          <Video className="h-5 w-5 text-primary" /> Upcoming Sessions
         </h2>
         <div className="grid gap-4 md:grid-cols-3">
           {LIVE_CLASSES.map((l) => (
@@ -58,7 +100,7 @@ function LiveClassesPage() {
                   <Calendar className="h-3.5 w-3.5" /> {l.date} · {l.time}
                 </div>
               </div>
-              <Button className="mt-4 w-full">
+              <Button className="mt-4 w-full" onClick={() => handleJoin(l.title)}>
                 <Video className="h-4 w-4 mr-2" /> Join {l.platform}
               </Button>
             </div>
@@ -125,7 +167,7 @@ function LiveClassesPage() {
                     {r.date} · {r.duration} · {r.views} views
                   </div>
                 </div>
-                <Button size="sm" variant="ghost">
+                <Button size="sm" variant="ghost" onClick={() => toast("Playing recording...")}>
                   Watch
                 </Button>
               </div>

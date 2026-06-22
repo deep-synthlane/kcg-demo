@@ -498,6 +498,51 @@ export const FACULTY_RATINGS = [
   { faculty: "Dr. Suresh M.", rating: 4.2 },
 ];
 
+// --- Student fees ---
+
+export const STUDENT_FEES = {
+  totalFee: 185000,
+  paidAmount: 142000,
+  pendingAmount: 43000,
+  dueDate: "15 Jul 2026",
+  status: "Partial" as const,
+  breakdown: [
+    { id: "f1", item: "Tuition Fee", amount: 120000, paid: 120000, status: "Paid" as const },
+    { id: "f2", item: "Hostel Fee", amount: 35000, paid: 22000, status: "Partial" as const },
+    { id: "f3", item: "Examination Fee", amount: 15000, paid: 0, status: "Pending" as const },
+    { id: "f4", item: "Library & Lab Fee", amount: 8000, paid: 0, status: "Pending" as const },
+    { id: "f5", item: "Development Fee", amount: 7000, paid: 0, status: "Pending" as const },
+  ],
+  history: [
+    { id: "h1", date: "12 Jan 2026", description: "Tuition Fee — Sem 6", amount: 60000, method: "UPI", ref: "TXN20260112A" },
+    { id: "h2", date: "15 Jul 2025", description: "Tuition Fee — Sem 5", amount: 60000, method: "Net Banking", ref: "TXN20250715B" },
+    { id: "h3", date: "20 Aug 2025", description: "Hostel Fee — Annual", amount: 22000, method: "Card", ref: "TXN20250820C" },
+    { id: "h4", date: "10 Jan 2025", description: "Tuition Fee — Sem 4", amount: 60000, method: "UPI", ref: "TXN20250110D" },
+  ],
+};
+
+// --- Faculty directory & assignments ---
+
+export const FACULTY_DIRECTORY = [
+  { id: "fac1", name: "Dr. Priya Ramanathan", dept: "CSE", specialization: "Data Structures & Algorithms", load: 18, maxLoad: 22 },
+  { id: "fac2", name: "Prof. Arjun Krishnan", dept: "CSE", specialization: "Database Systems", load: 16, maxLoad: 22 },
+  { id: "fac3", name: "Dr. Meera Subramanian", dept: "CSE", specialization: "Artificial Intelligence", load: 14, maxLoad: 20 },
+  { id: "fac4", name: "Dr. Karthik Venkatesan", dept: "CSE", specialization: "Operating Systems", load: 20, maxLoad: 22 },
+  { id: "fac5", name: "Dr. Suresh Menon", dept: "ECE", specialization: "VLSI Design", load: 12, maxLoad: 20 },
+  { id: "fac6", name: "Prof. Latha Iyer", dept: "ECE", specialization: "Signal Processing", load: 16, maxLoad: 22 },
+  { id: "fac7", name: "Dr. Joseph Thomas", dept: "MBA", specialization: "Finance & Analytics", load: 10, maxLoad: 18 },
+  { id: "fac8", name: "Dr. Anita Desai", dept: "CSE", specialization: "Computer Networks", load: 14, maxLoad: 20 },
+];
+
+export const FACULTY_ASSIGNMENTS = [
+  { id: "fa1", faculty: "Dr. Priya Ramanathan", course: "CSE301 · Data Structures", semester: 3, section: "A", hours: 4 },
+  { id: "fa2", faculty: "Prof. Arjun Krishnan", course: "CSE305 · DBMS", semester: 3, section: "A", hours: 4 },
+  { id: "fa3", faculty: "Dr. Meera Subramanian", course: "CSE402 · AI", semester: 5, section: "A", hours: 3 },
+  { id: "fa4", faculty: "Dr. Karthik Venkatesan", course: "CSE304 · OS", semester: 4, section: "B", hours: 4 },
+  { id: "fa5", faculty: "Dr. Suresh Menon", course: "ECE201 · VLSI Design", semester: 5, section: "A", hours: 3 },
+  { id: "fa6", faculty: "Prof. Latha Iyer", course: "ECE102 · Signals", semester: 3, section: "A", hours: 4 },
+];
+
 // --- Quiz questions for student quiz-taking flow ---
 
 export const QUIZ_QUESTIONS = [

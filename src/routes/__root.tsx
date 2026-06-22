@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CourseProvider } from "../lib/courseStore";
+import { CalendarProvider } from "../lib/calendarStore";
 
 function NotFoundComponent() {
   return (
@@ -128,8 +129,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <CourseProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
+        <CalendarProvider>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </CalendarProvider>
       </CourseProvider>
     </QueryClientProvider>
   );

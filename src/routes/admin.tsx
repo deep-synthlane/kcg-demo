@@ -10,6 +10,7 @@ import {
   BarChart3,
   Sparkles,
   Eye,
+  UserCog,
 } from "lucide-react";
 import { RoleShell, type NavItem } from "@/components/RoleShell";
 import { getSession } from "@/lib/session";
@@ -23,6 +24,7 @@ const NAV: NavItem[] = [
   { label: "Admissions", to: "/admin/admissions", icon: FileCheck, badge: "7" },
   { label: "Curriculum", to: "/admin/curriculum", icon: BookCopy },
   { label: "Content Review", to: "/admin/content-review", icon: Eye, badge: String(reviewCount) },
+  { label: "Faculty Assignment", to: "/admin/faculty-assignment", icon: UserCog },
   { label: "Students", to: "/admin/students", icon: Users },
   { label: "Timetable", to: "/admin/timetable", icon: Calendar },
   { label: "Examinations", to: "/admin/examinations", icon: FileSpreadsheet },

@@ -9,6 +9,7 @@ import {
   Download,
   FileText,
   Image,
+  UserPlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import { PageHeader, StatCard } from "@/components/RoleShell";
 import { APPLICATIONS } from "@/lib/mockData";
-import type { AdmissionApplication, ApplicationDocument } from "@/lib/admissions";
+import type { AdmissionApplication, ApplicationDocument, ApplicationStatus } from "@/lib/admissions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/admissions")({
@@ -46,16 +47,43 @@ function DetailField({ label, value }: { label: string; value: string | number |
 }
 
 function Admissions() {
+  const [apps, setApps] = useState<AdmissionApplication[]>(APPLICATIONS.map((a) => ({ ...a })));
   const [viewApp, setViewApp] = useState<AdmissionApplication | null>(null);
   const [viewDoc, setViewDoc] = useState<ApplicationDocument | null>(null);
+  const [enrolled, setEnrolled] = useState<Set<string>>(new Set());
 
-  const pending = APPLICATIONS.filter((a) => a.status === "Pending Review").length;
-  const approved = APPLICATIONS.filter((a) => a.status === "Approved").length;
-  const incomplete = APPLICATIONS.filter((a) => a.docs !== "Complete").length;
+  const pending = apps.filter((a) => a.status === "Pending Review").length;
+  const approved = apps.filter((a) => a.status === "Approved").length;
+  const incomplete = apps.filter((a) => a.docs !== "Complete").length;
 
-  const meritList = APPLICATIONS
+  const meritList = apps
     .filter((a) => a.status === "Approved" && a.meritScore !== null)
     .sort((a, b) => (b.meritScore ?? 0) - (a.meritScore ?? 0));
+
+  function updateStatus(id: string, status: ApplicationStatus) {
+    setApps((prev) =>
+      prev.map((a) => {
+        if (a.id !== id) return a;
+        const meritScore = status === "Approved"
+          ? Math.round((a.tenthMarks * 0.3 + a.twelfthMarks * 0.3 + (a.entranceExamScore ? a.entranceExamScore / 3.2 : 0) * 0.4) * 10) / 10
+          : a.meritScore;
+        return { ...a, status, meritScore, verified: status === "Approved" ? true : a.verified };
+      }),
+    );
+    const names: Record<ApplicationStatus, string> = {
+      "Approved": "approved",
+      "Rejected": "rejected",
+      "Pending Review": "moved to pending",
+      "Documents Required": "requested documents from",
+    };
+    const app = apps.find((a) => a.id === id);
+    toast.success(`Application ${names[status]} — ${app?.name}`);
+  }
+
+  function handleEnroll(app: AdmissionApplication) {
+    setEnrolled((prev) => new Set(prev).add(app.id));
+    toast.success(`${app.name} enrolled as student (ID: KCGU/26/${app.program.split(" ")[1] ?? "GEN"}/0${Math.floor(Math.random() * 900 + 100)})`);
+  }
 
   return (
     <div className="space-y-6">
@@ -94,7 +122,7 @@ function Admissions() {
       <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
         <div className="p-5 border-b flex justify-between items-center">
           <h3 className="font-semibold">Application Queue</h3>
-          <Badge variant="secondary">{APPLICATIONS.length} active</Badge>
+          <Badge variant="secondary">{apps.length} active</Badge>
         </div>
         <Table>
           <TableHeader>
@@ -108,7 +136,7 @@ function Admissions() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {APPLICATIONS.map((a) => (
+            {apps.map((a) => (
               <TableRow key={a.id}>
                 <TableCell className="font-mono text-xs">{a.id}</TableCell>
                 <TableCell className="font-medium">{a.name}</TableCell>
@@ -145,19 +173,48 @@ function Admissions() {
                     <Button size="sm" variant="ghost" onClick={() => setViewApp(a)}>
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
-                    <Button size="sm" variant="outline" className="text-success border-success/40">
-                      Approve
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => toast(`Document request sent to ${a.name}`)}
-                    >
-                      Request
-                    </Button>
-                    <Button size="sm" variant="outline" className="text-destructive border-destructive/40">
-                      Reject
-                    </Button>
+                    {a.status !== "Approved" && a.status !== "Rejected" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-success border-success/40"
+                        onClick={() => updateStatus(a.id, "Approved")}
+                      >
+                        Approve
+                      </Button>
+                    )}
+                    {a.status === "Approved" && !enrolled.has(a.id) && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-primary border-primary/40"
+                        onClick={() => handleEnroll(a)}
+                      >
+                        <UserPlus className="h-3.5 w-3.5 mr-1" /> Enroll
+                      </Button>
+                    )}
+                    {enrolled.has(a.id) && (
+                      <Badge className="bg-success/15 text-success border-0">Enrolled</Badge>
+                    )}
+                    {a.status !== "Approved" && a.status !== "Rejected" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => updateStatus(a.id, "Documents Required")}
+                      >
+                        Request
+                      </Button>
+                    )}
+                    {a.status !== "Rejected" && a.status !== "Approved" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-destructive border-destructive/40"
+                        onClick={() => updateStatus(a.id, "Rejected")}
+                      >
+                        Reject
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -183,38 +240,48 @@ function Admissions() {
             </Button>
             <Button
               size="sm"
-              onClick={() => toast(`Merit list generated for ${meritList.length} candidates`)}
+              onClick={() => toast.success(`Merit list generated for ${meritList.length} candidates`)}
             >
               Generate Merit List
             </Button>
           </div>
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Rank</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Program</TableHead>
-              <TableHead>Merit Score</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {meritList.map((a, i) => (
-              <TableRow key={a.id}>
-                <TableCell>
-                  <Badge variant="outline" className="font-mono">{i + 1}</Badge>
-                </TableCell>
-                <TableCell className="font-medium">{a.name}</TableCell>
-                <TableCell>{a.program}</TableCell>
-                <TableCell className="font-semibold">{a.meritScore}</TableCell>
-                <TableCell>
-                  <Badge className="bg-success/15 text-success border-0">Approved</Badge>
-                </TableCell>
+        {meritList.length === 0 ? (
+          <div className="p-6 text-center text-sm text-muted-foreground">
+            No approved applications yet. Approve applications to generate the merit list.
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Rank</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Program</TableHead>
+                <TableHead>Merit Score</TableHead>
+                <TableHead>Status</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {meritList.map((a, i) => (
+                <TableRow key={a.id}>
+                  <TableCell>
+                    <Badge variant="outline" className="font-mono">{i + 1}</Badge>
+                  </TableCell>
+                  <TableCell className="font-medium">{a.name}</TableCell>
+                  <TableCell>{a.program}</TableCell>
+                  <TableCell className="font-semibold">{a.meritScore}</TableCell>
+                  <TableCell>
+                    {enrolled.has(a.id) ? (
+                      <Badge className="bg-primary/15 text-primary border-0">Enrolled</Badge>
+                    ) : (
+                      <Badge className="bg-success/15 text-success border-0">Approved</Badge>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
 
       {/* View application dialog */}
@@ -253,10 +320,7 @@ function Admissions() {
                   <DetailField label="10th Marks (%)" value={viewApp.tenthMarks} />
                   <DetailField label="12th Marks (%)" value={viewApp.twelfthMarks} />
                   <DetailField label="Previous Institution" value={viewApp.previousInstitution} />
-                  <DetailField
-                    label="Entrance Exam Score"
-                    value={viewApp.entranceExamScore}
-                  />
+                  <DetailField label="Entrance Exam Score" value={viewApp.entranceExamScore} />
                 </dl>
               </div>
 

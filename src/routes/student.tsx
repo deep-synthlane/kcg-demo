@@ -9,6 +9,7 @@ import {
   User,
   Ticket,
   BookMarked,
+  IndianRupee,
 } from "lucide-react";
 import { RoleShell, type NavItem } from "@/components/RoleShell";
 import { getSession } from "@/lib/session";
@@ -20,6 +21,7 @@ const NAV: NavItem[] = [
   { label: "Assessments", to: "/student/assessments", icon: ClipboardList, badge: "3" },
   { label: "Live Classes", to: "/student/live-classes", icon: Video },
   { label: "Timetable", to: "/student/timetable", icon: Calendar },
+  { label: "Fees", to: "/student/fees", icon: IndianRupee },
   { label: "Curriculum", to: "/student/curriculum", icon: BookMarked },
   { label: "Hall Ticket", to: "/student/hall-ticket", icon: Ticket },
   { label: "Profile", to: "/student/profile", icon: User },
