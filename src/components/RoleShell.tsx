@@ -1,5 +1,6 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
+  ArrowLeft,
   Bell,
   ChevronRight,
   GraduationCap,
@@ -23,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { clearSession, getSession, type Session } from "@/lib/session";
+import { clearSession, getSession, canAccessAi, type Session } from "@/lib/session";
 import { UNIVERSITY, NOTIFICATIONS, type Role } from "@/lib/mockData";
 
 export type NavItem = {
@@ -44,10 +45,12 @@ const ROLE_LABEL: Record<Role, string> = {
 export function RoleShell({
   role,
   nav,
+  backTo,
   children,
 }: {
   role: Role;
   nav: NavItem[];
+  backTo?: { label: string; to: string };
   children: ReactNode;
 }) {
   const navigate = useNavigate();
@@ -72,7 +75,7 @@ export function RoleShell({
     <div className="flex min-h-screen bg-muted/30">
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground">
-        <SidebarInner role={role} nav={nav} />
+        <SidebarInner role={role} nav={nav} backTo={backTo} />
       </aside>
 
       <div className="flex flex-1 min-w-0 flex-col">
@@ -85,7 +88,7 @@ export function RoleShell({
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-72 bg-sidebar p-0 text-sidebar-foreground">
-              <SidebarInner role={role} nav={nav} />
+              <SidebarInner role={role} nav={nav} backTo={backTo} />
             </SheetContent>
           </Sheet>
 
@@ -159,8 +162,17 @@ export function RoleShell({
   );
 }
 
-function SidebarInner({ role, nav }: { role: Role; nav: NavItem[] }) {
+function SidebarInner({
+  role,
+  nav,
+  backTo,
+}: {
+  role: Role;
+  nav: NavItem[];
+  backTo?: { label: string; to: string };
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const onAiSection = pathname.startsWith("/ai");
 
   return (
     <div className="flex h-full flex-col">
@@ -177,6 +189,15 @@ function SidebarInner({ role, nav }: { role: Role; nav: NavItem[] }) {
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+        {backTo && (
+          <Link
+            to={backTo.to}
+            className="group mb-2 flex items-center gap-3 rounded-md px-3 py-2 text-sm text-sidebar-foreground/80 transition hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
+          >
+            <ArrowLeft className="h-4 w-4 shrink-0" />
+            <span className="flex-1 truncate">{backTo.label}</span>
+          </Link>
+        )}
         {nav.map((item) => {
           const Icon = item.icon;
           const linkClass = cn(
@@ -228,18 +249,20 @@ function SidebarInner({ role, nav }: { role: Role; nav: NavItem[] }) {
         })}
       </nav>
 
-      <div className="border-t border-sidebar-border p-3">
-        <Link
-          to="/ai/interview"
-          className="flex items-center gap-3 rounded-md bg-sidebar-primary/10 px-3 py-2.5 text-sm text-sidebar-primary-foreground hover:bg-sidebar-primary/20 transition"
-        >
-          <Sparkles className="h-4 w-4 text-sidebar-primary" />
-          <div className="flex-1">
-            <div className="font-medium text-sidebar-foreground">AI & Smart Features</div>
-            <div className="text-[11px] text-sidebar-foreground/60">Interview · Proctoring</div>
-          </div>
-        </Link>
-      </div>
+      {canAccessAi(role) && !onAiSection && (
+        <div className="border-t border-sidebar-border p-3">
+          <Link
+            to="/ai/interview"
+            className="flex items-center gap-3 rounded-md bg-sidebar-primary/10 px-3 py-2.5 text-sm text-sidebar-primary-foreground hover:bg-sidebar-primary/20 transition"
+          >
+            <Sparkles className="h-4 w-4 text-sidebar-primary" />
+            <div className="flex-1">
+              <div className="font-medium text-sidebar-foreground">AI Smart Features</div>
+              <div className="text-[11px] text-sidebar-foreground/60">Interview · Proctoring</div>
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

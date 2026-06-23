@@ -11,6 +11,11 @@ import {
   Lock,
   GripVertical,
   Pencil,
+  Upload,
+  Eye,
+  Download,
+  Presentation,
+  Package,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +40,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useCourses, type UnitStatus } from "@/lib/courseStore";
+import { useCourses, type UnitStatus, type Lesson } from "@/lib/courseStore";
+import { UploadMaterialDialog } from "@/components/UploadMaterialDialog";
+import { StudyMaterialPreview } from "@/components/StudyMaterialPreview";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -52,6 +59,11 @@ function TeacherCourseDetail() {
   const [newUnitTitle, setNewUnitTitle] = useState("");
   const [editingUnit, setEditingUnit] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
+
+  // Upload dialog
+  const [showUpload, setShowUpload] = useState(false);
+  const [uploadUnitId, setUploadUnitId] = useState<string | undefined>();
+  const [viewLesson, setViewLesson] = useState<Lesson | null>(null);
 
   // Lesson dialog
   const [showLesson, setShowLesson] = useState<string | null>(null);
@@ -141,9 +153,28 @@ function TeacherCourseDetail() {
     return <PlayCircle className="h-4 w-4 text-primary" />;
   };
 
+  function handleMaterialUpload(unitId: string, lesson: Omit<Lesson, "id" | "done">) {
+    addLesson(courseId, unitId, lesson);
+  }
+
+  function handleDownload(lesson: Lesson) {
+    if (!lesson.fileUrl) {
+      toast.error("No file available for download");
+      return;
+    }
+    const a = document.createElement("a");
+    a.href = lesson.fileUrl;
+    a.download = lesson.fileName ?? lesson.title;
+    a.click();
+    toast.success("Download started");
+  }
+
   const LessonIcon = ({ type }: { type: string }) => {
     if (type === "video") return <PlayCircle className="h-4 w-4 text-blue-500" />;
     if (type === "pdf") return <FileText className="h-4 w-4 text-orange-500" />;
+    if (type === "ppt") return <Presentation className="h-4 w-4 text-rose-500" />;
+    if (type === "docx") return <FileText className="h-4 w-4 text-sky-500" />;
+    if (type === "study") return <Package className="h-4 w-4 text-amber-600" />;
     return <HelpCircle className="h-4 w-4 text-violet-500" />;
   };
 
@@ -159,15 +190,28 @@ function TeacherCourseDetail() {
       {/* Course header */}
       <div className={`rounded-2xl bg-gradient-to-br ${course.color} p-6 text-white relative overflow-hidden`}>
         <div className="absolute inset-0 bg-black/20" />
-        <div className="relative">
-          <div className="text-xs uppercase tracking-wider opacity-80">{course.code}</div>
-          <h1 className="font-display text-2xl md:text-3xl font-semibold mt-1">{course.title}</h1>
-          <p className="mt-1 opacity-90 text-sm">{course.faculty} · {course.department}</p>
-          <div className="flex gap-3 mt-3">
-            <Badge className="bg-white/20 border-0 text-white">{course.credits} credits</Badge>
-            <Badge className="bg-white/20 border-0 text-white">{course.units.length} units</Badge>
-            <Badge className="bg-white/20 border-0 text-white">{course.students} students</Badge>
+        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="text-xs uppercase tracking-wider opacity-80">{course.code}</div>
+            <h1 className="font-display text-2xl md:text-3xl font-semibold mt-1">{course.title}</h1>
+            <p className="mt-1 opacity-90 text-sm">{course.faculty} · {course.department}</p>
+            <div className="flex gap-3 mt-3">
+              <Badge className="bg-white/20 border-0 text-white">{course.credits} credits</Badge>
+              <Badge className="bg-white/20 border-0 text-white">{course.units.length} units</Badge>
+              <Badge className="bg-white/20 border-0 text-white">{course.students} students</Badge>
+            </div>
           </div>
+          <Button
+            variant="secondary"
+            className="shrink-0 bg-white/95 text-foreground hover:bg-white"
+            onClick={() => {
+              setUploadUnitId(course.units[0]?.id);
+              setShowUpload(true);
+            }}
+            disabled={course.units.length === 0}
+          >
+            <Upload className="h-4 w-4 mr-2" /> Upload Material
+          </Button>
         </div>
       </div>
 
@@ -222,9 +266,32 @@ function TeacherCourseDetail() {
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium truncate">{lesson.title}</div>
                         <div className="text-xs text-muted-foreground capitalize">
-                          {lesson.type} · {lesson.duration}
+                          {lesson.type}
+                          {lesson.fileName ? ` · ${lesson.fileName}` : ""}
+                          {!lesson.fileName && ` · ${lesson.duration}`}
                         </div>
                       </div>
+                      {lesson.type !== "quiz" && (
+                        <div className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 text-xs px-2"
+                            onClick={() => setViewLesson(lesson)}
+                          >
+                            <Eye className="h-3 w-3 mr-1" /> View
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 text-xs px-2"
+                            onClick={() => handleDownload(lesson)}
+                            disabled={!lesson.fileUrl}
+                          >
+                            <Download className="h-3 w-3 mr-1" /> Download
+                          </Button>
+                        </div>
+                      )}
                       <Button
                         size="sm"
                         variant="ghost"
@@ -246,6 +313,16 @@ function TeacherCourseDetail() {
 
                 {/* Unit actions */}
                 <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setUploadUnitId(unit.id);
+                      setShowUpload(true);
+                    }}
+                  >
+                    <Upload className="h-3.5 w-3.5 mr-1" /> Upload
+                  </Button>
                   <Button size="sm" variant="outline" onClick={() => setShowLesson(unit.id)}>
                     <Plus className="h-3.5 w-3.5 mr-1" /> Add Lesson
                   </Button>
@@ -302,6 +379,51 @@ function TeacherCourseDetail() {
           </Button>
         </div>
       </div>
+
+      <UploadMaterialDialog
+        open={showUpload}
+        onOpenChange={setShowUpload}
+        units={course.units.map((u) => ({ id: u.id, title: u.title }))}
+        defaultUnitId={uploadUnitId}
+        onComplete={handleMaterialUpload}
+      />
+
+      <Dialog open={!!viewLesson} onOpenChange={(v) => !v && setViewLesson(null)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          {viewLesson && (
+            <>
+              <DialogHeader>
+                <DialogTitle>{viewLesson.title}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="grid gap-2 sm:grid-cols-3 text-sm">
+                  <div className="rounded-lg border bg-muted/30 p-3">
+                    <p className="text-xs text-muted-foreground">Type</p>
+                    <p className="font-medium capitalize">{viewLesson.type}</p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/30 p-3">
+                    <p className="text-xs text-muted-foreground">File</p>
+                    <p className="font-medium truncate">{viewLesson.fileName ?? "—"}</p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/30 p-3">
+                    <p className="text-xs text-muted-foreground">Size</p>
+                    <p className="font-medium">{viewLesson.fileSize ?? viewLesson.duration}</p>
+                  </div>
+                </div>
+                <StudyMaterialPreview lesson={viewLesson} />
+                <div className="flex gap-2 border-t pt-4">
+                  <Button variant="outline" onClick={() => handleDownload(viewLesson)} disabled={!viewLesson.fileUrl}>
+                    <Download className="h-4 w-4 mr-2" /> Download
+                  </Button>
+                  <Button variant="ghost" className="ml-auto" onClick={() => setViewLesson(null)}>
+                    Close
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Add Lesson Dialog */}
       <Dialog open={!!showLesson} onOpenChange={(v) => !v && setShowLesson(null)}>

@@ -10,7 +10,6 @@ import {
   Ticket,
   BookMarked,
   IndianRupee,
-  FileBadge,
   Library,
 } from "lucide-react";
 import { RoleShell, type NavItem } from "@/components/RoleShell";
@@ -31,7 +30,6 @@ const NAV: NavItem[] = [
     icon: Library,
     external: true,
   },
-  { label: "My Applications", to: "/student/applications", icon: FileBadge },
   { label: "Hall Ticket", to: "/student/hall-ticket", icon: Ticket },
   { label: "Profile", to: "/student/profile", icon: User },
 ];

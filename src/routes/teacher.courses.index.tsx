@@ -7,6 +7,7 @@ import {
   PlayCircle,
   FileText,
   HelpCircle,
+  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,7 +28,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PageHeader } from "@/components/RoleShell";
+import { UploadMaterialDialog } from "@/components/UploadMaterialDialog";
 import { useCourses } from "@/lib/courseStore";
+import type { Lesson } from "@/lib/courseStore";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/teacher/courses/")({
@@ -50,6 +53,7 @@ function TeacherCourses() {
   const [showCreate, setShowCreate] = useState(false);
   const [showLesson, setShowLesson] = useState<string | null>(null);
   const [showQuiz, setShowQuiz] = useState<string | null>(null);
+  const [showUpload, setShowUpload] = useState<string | null>(null);
 
   // Create course form state
   const [newCode, setNewCode] = useState("");
@@ -137,6 +141,12 @@ function TeacherCourses() {
     setShowQuiz(null);
   }
 
+  function handleMaterialUpload(courseId: string, unitId: string, lesson: Omit<Lesson, "id" | "done">) {
+    addLesson(courseId, unitId, lesson);
+  }
+
+  const uploadCourse = showUpload ? courses.find((c) => c.id === showUpload) : null;
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -179,39 +189,62 @@ function TeacherCourses() {
                 <Progress value={c.progress} className="h-1.5" />
               </div>
 
-              <div className="flex gap-2 pt-1">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => navigate({ to: "/teacher/courses/$courseId", params: { courseId: c.id } })}
-                >
-                  Manage Units
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => {
-                    setShowLesson(c.id);
-                    if (c.units.length > 0) setLessonUnit(c.units[0].id);
-                  }}
-                >
-                  Add Lesson
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => openQuizDialog(c.id)}
-                >
-                  New Quiz
-                </Button>
+              <div className="flex flex-col gap-2 pt-1">
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => navigate({ to: "/teacher/courses/$courseId", params: { courseId: c.id } })}
+                  >
+                    Manage Units
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => setShowUpload(c.id)}
+                    disabled={c.units.length === 0}
+                  >
+                    <Upload className="h-3.5 w-3.5 mr-1" /> Upload
+                  </Button>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => {
+                      setShowLesson(c.id);
+                      if (c.units.length > 0) setLessonUnit(c.units[0].id);
+                    }}
+                  >
+                    Add Lesson
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => openQuizDialog(c.id)}
+                  >
+                    New Quiz
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {uploadCourse && (
+        <UploadMaterialDialog
+          open={!!showUpload}
+          onOpenChange={(v) => !v && setShowUpload(null)}
+          units={uploadCourse.units.map((u) => ({ id: u.id, title: u.title }))}
+          onComplete={(unitId, lesson) => {
+            handleMaterialUpload(uploadCourse.id, unitId, lesson);
+          }}
+        />
+      )}
 
       {/* Create Course Dialog */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>

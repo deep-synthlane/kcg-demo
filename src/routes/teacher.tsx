@@ -10,6 +10,7 @@ import {
   ClipboardCheck,
   BookMarked,
   Library,
+  Sparkles,
 } from "lucide-react";
 import { RoleShell, type NavItem } from "@/components/RoleShell";
 import { getSession } from "@/lib/session";
@@ -30,6 +31,7 @@ const NAV: NavItem[] = [
     icon: Library,
     external: true,
   },
+  { label: "AI Smart Features", to: "/ai/interview", icon: Sparkles },
 ];
 
 function TeacherLayout() {

@@ -1,7 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, GraduationCap, BookOpen, TrendingUp, Award, User, CheckCircle2, Clock } from "lucide-react";
+import { useState } from "react";
+import {
+  Mail,
+  GraduationCap,
+  BookOpen,
+  TrendingUp,
+  Award,
+  User,
+  CheckCircle2,
+  Clock,
+  Eye,
+  Download,
+  FileText,
+} from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -20,7 +40,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { PageHeader, StatCard } from "@/components/RoleShell";
-import { STUDENT_PROFILE, TRANSCRIPT, GRADE_DISTRIBUTION, ENROLLMENT_HISTORY } from "@/lib/mockData";
+import {
+  STUDENT_PROFILE,
+  TRANSCRIPT,
+  TRANSCRIPT_COURSES,
+  GRADE_DISTRIBUTION,
+  ENROLLMENT_HISTORY,
+} from "@/lib/mockData";
+import { downloadTranscript } from "@/lib/pdfTranscript";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/student/profile")({
   head: () => ({ meta: [{ title: "Profile · KCG" }] }),
@@ -29,6 +57,37 @@ export const Route = createFileRoute("/student/profile")({
 
 function ProfilePage() {
   const p = STUDENT_PROFILE;
+  const [transcriptOpen, setTranscriptOpen] = useState(false);
+  const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
+  const [downloading, setDownloading] = useState(false);
+
+  function openTranscript(semester: string | null = null) {
+    setSelectedSemester(semester);
+    setTranscriptOpen(true);
+  }
+
+  function handleDownloadTranscript(semester?: string) {
+    setDownloading(true);
+    try {
+      downloadTranscript(p, TRANSCRIPT, TRANSCRIPT_COURSES);
+      toast.success(
+        semester ? `Transcript downloaded (${semester})` : "Transcript downloaded",
+      );
+    } catch {
+      toast.error("Could not generate transcript PDF");
+    } finally {
+      setDownloading(false);
+    }
+  }
+
+  const filteredCourses = selectedSemester
+    ? TRANSCRIPT_COURSES.filter((c) => c.sem === selectedSemester)
+    : TRANSCRIPT_COURSES;
+
+  const filteredSemesters = selectedSemester
+    ? TRANSCRIPT.filter((t) => t.sem === selectedSemester)
+    : TRANSCRIPT;
+
   return (
     <div className="space-y-6">
       <PageHeader title="Student Profile" subtitle="Personal details, academic history & transcript" />
@@ -66,12 +125,70 @@ function ProfilePage() {
         <StatCard label="Current Sem" value="6" icon={GraduationCap} hint="of 8" />
       </div>
 
+      <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+        <div className="p-5 border-b">
+          <h3 className="font-semibold flex items-center gap-2">
+            <User className="h-4 w-4 text-primary" /> Academic Transcript
+          </h3>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Document</TableHead>
+              <TableHead>Format</TableHead>
+              <TableHead>Credits</TableHead>
+              <TableHead>CGPA</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                <div className="flex items-center gap-3">
+                  <div className="grid h-8 w-8 place-items-center rounded-md bg-primary/10 text-primary">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <span className="font-medium">Official Academic Transcript</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">{p.batch} · {p.department}</p>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline">PDF · Online</Badge>
+              </TableCell>
+              <TableCell>{p.credits}/{p.totalCredits}</TableCell>
+              <TableCell className="font-semibold">{p.cgpa}</TableCell>
+              <TableCell>
+                <Badge className="bg-success/15 text-success border-0">Available</Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex justify-end gap-2">
+                  <Button size="sm" variant="outline" onClick={() => openTranscript()}>
+                    <Eye className="h-3.5 w-3.5 mr-1.5" />
+                    View
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleDownloadTranscript()}
+                    disabled={downloading}
+                  >
+                    <Download className="h-3.5 w-3.5 mr-1.5" />
+                    {downloading ? "Generating…" : "Download"}
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
           <div className="p-5 border-b">
-            <h3 className="font-semibold flex items-center gap-2">
-              <User className="h-4 w-4 text-primary" /> Academic Transcript
-            </h3>
+            <h3 className="font-semibold text-sm">Semester-wise Performance</h3>
           </div>
           <Table>
             <TableHeader>
@@ -80,6 +197,7 @@ function ProfilePage() {
                 <TableHead>GPA</TableHead>
                 <TableHead>Credits</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -98,6 +216,23 @@ function ProfilePage() {
                     >
                       {t.status}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-end gap-2">
+                      <Button size="sm" variant="outline" onClick={() => openTranscript(t.sem)}>
+                        <Eye className="h-3.5 w-3.5 mr-1.5" />
+                        View
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDownloadTranscript(t.sem)}
+                        disabled={downloading}
+                      >
+                        <Download className="h-3.5 w-3.5 mr-1.5" />
+                        Download
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -171,6 +306,129 @@ function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={transcriptOpen}
+        onOpenChange={(open) => {
+          setTranscriptOpen(open);
+          if (!open) setSelectedSemester(null);
+        }}
+      >
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedSemester ? `Academic Transcript · ${selectedSemester}` : "Academic Transcript"}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            <div className="rounded-lg border bg-muted/30 p-4 grid gap-2 sm:grid-cols-2 text-sm">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Student</p>
+                <p className="font-semibold">{p.name}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Enrolment No.</p>
+                <p className="font-semibold font-mono">{p.enrollment}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Programme</p>
+                <p className="font-medium">{p.department}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">CGPA</p>
+                <p className="font-semibold text-primary">{p.cgpa}</p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold mb-3">Semester Summary</h4>
+              <div className="rounded-lg border overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Semester</TableHead>
+                      <TableHead>GPA</TableHead>
+                      <TableHead>Credits</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredSemesters.map((t) => (
+                      <TableRow key={t.sem}>
+                        <TableCell className="font-medium">{t.sem}</TableCell>
+                        <TableCell>{t.gpa}</TableCell>
+                        <TableCell>{t.credits}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={
+                              t.status === "Completed"
+                                ? "bg-success/15 text-success border-0"
+                                : "bg-primary/10 text-primary border-0"
+                            }
+                          >
+                            {t.status}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold mb-3">Course-wise Grades</h4>
+              <div className="rounded-lg border overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Semester</TableHead>
+                      <TableHead>Code</TableHead>
+                      <TableHead>Course</TableHead>
+                      <TableHead>Credits</TableHead>
+                      <TableHead>Grade</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredCourses.map((c) => (
+                      <TableRow key={`${c.sem}-${c.code}`}>
+                        <TableCell className="text-muted-foreground">{c.sem}</TableCell>
+                        <TableCell className="font-mono text-xs">{c.code}</TableCell>
+                        <TableCell className="font-medium">{c.title}</TableCell>
+                        <TableCell>{c.credits}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={
+                              c.grade === "—"
+                                ? "bg-muted text-muted-foreground border-0"
+                                : c.grade === "O" || c.grade.startsWith("A")
+                                  ? "bg-success/15 text-success border-0"
+                                  : "bg-primary/10 text-primary border-0"
+                            }
+                          >
+                            {c.grade}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 border-t pt-4">
+              <Button onClick={() => handleDownloadTranscript(selectedSemester ?? undefined)} disabled={downloading}>
+                <Download className="h-4 w-4 mr-2" />
+                {downloading ? "Generating PDF…" : "Download Transcript (PDF)"}
+              </Button>
+              <Button variant="outline" className="ml-auto" onClick={() => setTranscriptOpen(false)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

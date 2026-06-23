@@ -3,7 +3,7 @@ import { COURSES as SEED_COURSES, UNITS as SEED_UNITS } from "./mockData";
 
 // --- Types ---
 
-export type LessonType = "video" | "pdf" | "quiz";
+export type LessonType = "video" | "pdf" | "quiz" | "ppt" | "docx" | "study";
 
 export type Lesson = {
   id: string;
@@ -11,6 +11,9 @@ export type Lesson = {
   type: LessonType;
   duration: string;
   done: boolean;
+  fileName?: string;
+  fileSize?: string;
+  fileUrl?: string;
 };
 
 export type UnitStatus = "completed" | "in-progress" | "locked";

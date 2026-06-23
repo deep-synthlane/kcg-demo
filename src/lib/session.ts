@@ -36,3 +36,9 @@ export function clearSession() {
 export function defaultsFor(role: Role) {
   return DEFAULT_NAMES[role];
 }
+
+const AI_ALLOWED_ROLES: Role[] = ["admin", "teacher"];
+
+export function canAccessAi(role: Role) {
+  return AI_ALLOWED_ROLES.includes(role);
+}

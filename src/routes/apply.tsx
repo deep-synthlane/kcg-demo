@@ -291,8 +291,8 @@ function ApplyPage() {
             </div>
 
             <p className="text-center text-xs text-muted-foreground">
-              You can download your receipt anytime from{" "}
-              <strong>My Applications</strong> in your Student Dashboard.
+              You can download your receipt again using the button above, or from the
+              confirmation email sent to your registered address.
             </p>
           </div>
         </div>

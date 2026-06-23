@@ -136,17 +136,73 @@ export const ATTENDANCE_TREND = [
 ];
 
 export const UPCOMING_EXAMS = [
-  { id: "e1", course: "Data Structures", date: "28 Jun 2026", time: "10:00 AM", room: "Hall A-201", type: "Mid-Sem" },
-  { id: "e2", course: "DBMS", date: "30 Jun 2026", time: "02:00 PM", room: "Hall B-104", type: "Mid-Sem" },
-  { id: "e3", course: "AI", date: "03 Jul 2026", time: "10:00 AM", room: "Hall A-105", type: "Mid-Sem" },
-  { id: "e4", course: "Operating Systems", date: "05 Jul 2026", time: "02:00 PM", room: "Hall C-301", type: "Mid-Sem" },
+  {
+    id: "e1",
+    course: "Data Structures",
+    date: "28 Jun 2026",
+    time: "10:00 AM",
+    room: "Hall A-201",
+    type: "Mid-Sem",
+  },
+  {
+    id: "e2",
+    course: "DBMS",
+    date: "30 Jun 2026",
+    time: "02:00 PM",
+    room: "Hall B-104",
+    type: "Mid-Sem",
+  },
+  {
+    id: "e3",
+    course: "AI",
+    date: "03 Jul 2026",
+    time: "10:00 AM",
+    room: "Hall A-105",
+    type: "Mid-Sem",
+  },
+  {
+    id: "e4",
+    course: "Operating Systems",
+    date: "05 Jul 2026",
+    time: "02:00 PM",
+    room: "Hall C-301",
+    type: "Mid-Sem",
+  },
 ];
 
 export const ASSIGNMENTS = [
-  { id: "a1", title: "Implement LRU Cache", course: "Data Structures", due: "24 Jun", status: "Pending", weight: 10 },
-  { id: "a2", title: "ER Diagram for Library System", course: "DBMS", due: "26 Jun", status: "Submitted", weight: 8 },
-  { id: "a3", title: "Min-Max Search Tree", course: "AI", due: "29 Jun", status: "Pending", weight: 12 },
-  { id: "a4", title: "Process Scheduling Sim", course: "OS", due: "01 Jul", status: "Draft", weight: 10 },
+  {
+    id: "a1",
+    title: "Implement LRU Cache",
+    course: "Data Structures",
+    due: "24 Jun",
+    status: "Pending",
+    weight: 10,
+  },
+  {
+    id: "a2",
+    title: "ER Diagram for Library System",
+    course: "DBMS",
+    due: "26 Jun",
+    status: "Submitted",
+    weight: 8,
+  },
+  {
+    id: "a3",
+    title: "Min-Max Search Tree",
+    course: "AI",
+    due: "29 Jun",
+    status: "Pending",
+    weight: 12,
+  },
+  {
+    id: "a4",
+    title: "Process Scheduling Sim",
+    course: "OS",
+    due: "01 Jul",
+    status: "Draft",
+    weight: 10,
+  },
 ];
 
 export const NOTIFICATIONS = [
@@ -187,7 +243,13 @@ export const LIVE_CLASSES = [
 ];
 
 export const RECORDINGS = [
-  { id: "r1", title: "Data Structures · Linked Lists", date: "14 Jun", duration: "58:12", views: 142 },
+  {
+    id: "r1",
+    title: "Data Structures · Linked Lists",
+    date: "14 Jun",
+    duration: "58:12",
+    views: 142,
+  },
   { id: "r2", title: "DBMS · Joins & Subqueries", date: "12 Jun", duration: "1:04:30", views: 168 },
   { id: "r3", title: "AI · Search Algorithms", date: "10 Jun", duration: "47:55", views: 121 },
   { id: "r4", title: "OS · Memory Management", date: "08 Jun", duration: "52:18", views: 134 },
@@ -197,10 +259,37 @@ export const TIMETABLE = {
   periods: ["09:00", "10:00", "11:00", "12:00", "01:00", "02:00", "03:00", "04:00"],
   days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   grid: [
-    ["DS · A-201", "DBMS · B-104", "—", "AI · A-105", "Lunch", "OS · C-301", "Lab · CSL-1", "Lab · CSL-1"],
+    [
+      "DS · A-201",
+      "DBMS · B-104",
+      "—",
+      "AI · A-105",
+      "Lunch",
+      "OS · C-301",
+      "Lab · CSL-1",
+      "Lab · CSL-1",
+    ],
     ["AI · A-105", "DS · A-201", "OS · C-301", "—", "Lunch", "DBMS · B-104", "Seminar", "—"],
-    ["DBMS · B-104", "OS · C-301", "DS · A-201", "AI · A-105", "Lunch", "Mentor", "Lab · CSL-2", "Lab · CSL-2"],
-    ["OS · C-301", "AI · A-105", "DBMS · B-104", "DS · A-201", "Lunch", "Library", "Lab · CSL-1", "—"],
+    [
+      "DBMS · B-104",
+      "OS · C-301",
+      "DS · A-201",
+      "AI · A-105",
+      "Lunch",
+      "Mentor",
+      "Lab · CSL-2",
+      "Lab · CSL-2",
+    ],
+    [
+      "OS · C-301",
+      "AI · A-105",
+      "DBMS · B-104",
+      "DS · A-201",
+      "Lunch",
+      "Library",
+      "Lab · CSL-1",
+      "—",
+    ],
     ["DS · A-201", "DBMS · B-104", "AI · A-105", "OS · C-301", "Lunch", "Sports", "Club", "—"],
     ["Workshop", "Workshop", "—", "—", "—", "—", "—", "—"],
   ],
@@ -227,6 +316,39 @@ export const TRANSCRIPT = [
   { sem: "Sem 4", gpa: 8.9, credits: 24, status: "Completed" },
   { sem: "Sem 5", gpa: 8.8, credits: 22, status: "Completed" },
   { sem: "Sem 6", gpa: 8.7, credits: 22, status: "Ongoing" },
+];
+
+export const TRANSCRIPT_COURSES = [
+  { sem: "Sem 1", code: "CSE101", title: "Programming in C", credits: 4, grade: "A+" },
+  { sem: "Sem 1", code: "MAT101", title: "Engineering Mathematics I", credits: 4, grade: "A" },
+  { sem: "Sem 1", code: "PHY101", title: "Engineering Physics", credits: 4, grade: "A+" },
+  { sem: "Sem 1", code: "HUM101", title: "Communicative English", credits: 3, grade: "O" },
+  { sem: "Sem 2", code: "CSE102", title: "Data Structures", credits: 4, grade: "A+" },
+  { sem: "Sem 2", code: "MAT102", title: "Engineering Mathematics II", credits: 4, grade: "A" },
+  { sem: "Sem 2", code: "ECE101", title: "Digital Logic Design", credits: 4, grade: "A+" },
+  { sem: "Sem 2", code: "CSE103", title: "Object-Oriented Programming", credits: 4, grade: "A" },
+  {
+    sem: "Sem 3",
+    code: "CSE201",
+    title: "Design & Analysis of Algorithms",
+    credits: 4,
+    grade: "A+",
+  },
+  { sem: "Sem 3", code: "CSE202", title: "Database Management Systems", credits: 4, grade: "A" },
+  { sem: "Sem 3", code: "CSE203", title: "Computer Organization", credits: 4, grade: "A+" },
+  { sem: "Sem 3", code: "CSE204", title: "Discrete Mathematics", credits: 4, grade: "A" },
+  { sem: "Sem 4", code: "CSE301", title: "Operating Systems", credits: 4, grade: "A+" },
+  { sem: "Sem 4", code: "CSE302", title: "Computer Networks", credits: 4, grade: "A" },
+  { sem: "Sem 4", code: "CSE303", title: "Software Engineering", credits: 3, grade: "A+" },
+  { sem: "Sem 4", code: "CSE304", title: "Theory of Computation", credits: 4, grade: "A" },
+  { sem: "Sem 5", code: "CSE401", title: "Machine Learning", credits: 4, grade: "A+" },
+  { sem: "Sem 5", code: "CSE402", title: "Artificial Intelligence", credits: 4, grade: "A" },
+  { sem: "Sem 5", code: "CSE403", title: "Web Technologies", credits: 3, grade: "A+" },
+  { sem: "Sem 5", code: "CSE404", title: "Compiler Design", credits: 4, grade: "A" },
+  { sem: "Sem 6", code: "CSE501", title: "Cloud Computing", credits: 4, grade: "A" },
+  { sem: "Sem 6", code: "CSE502", title: "Information Security", credits: 4, grade: "A+" },
+  { sem: "Sem 6", code: "CSE503", title: "Capstone Project I", credits: 4, grade: "—" },
+  { sem: "Sem 6", code: "CSE504", title: "Professional Ethics", credits: 2, grade: "—" },
 ];
 
 export const GRADE_DISTRIBUTION = [
@@ -265,174 +387,420 @@ export { APPLICATIONS } from "./admissions";
 export type { AdmissionApplication, ApplicationDocument } from "./admissions";
 
 export const STUDENTS_DIRECTORY = [
-  { slug: "s0", id: "KCGU/22/CSE/0184", name: "Ananya Iyer",  dept: "CSE",   sem: 6, cgpa: 8.74, attendance: 89 },
-  { slug: "s1", id: "KCGU/22/CSE/0185", name: "Rahul Verma",  dept: "CSE",   sem: 6, cgpa: 8.12, attendance: 82 },
-  { slug: "s2", id: "KCGU/22/ECE/0091", name: "Priya Nair",   dept: "ECE",   sem: 6, cgpa: 9.02, attendance: 94 },
-  { slug: "s3", id: "KCGU/23/MECH/0040",name: "Imran Khan",   dept: "MECH",  sem: 4, cgpa: 7.65, attendance: 78 },
-  { slug: "s4", id: "KCGU/24/MBA/0018", name: "Ritika Bose",  dept: "MBA",   sem: 2, cgpa: 8.92, attendance: 91 },
-  { slug: "s5", id: "KCGU/23/CIVIL/0022",name:"Suresh Babu",  dept: "CIVIL", sem: 4, cgpa: 7.41, attendance: 74 },
+  {
+    slug: "s0",
+    id: "KCGU/22/CSE/0184",
+    name: "Ananya Iyer",
+    dept: "CSE",
+    sem: 6,
+    cgpa: 8.74,
+    attendance: 89,
+  },
+  {
+    slug: "s1",
+    id: "KCGU/22/CSE/0185",
+    name: "Rahul Verma",
+    dept: "CSE",
+    sem: 6,
+    cgpa: 8.12,
+    attendance: 82,
+  },
+  {
+    slug: "s2",
+    id: "KCGU/22/ECE/0091",
+    name: "Priya Nair",
+    dept: "ECE",
+    sem: 6,
+    cgpa: 9.02,
+    attendance: 94,
+  },
+  {
+    slug: "s3",
+    id: "KCGU/23/MECH/0040",
+    name: "Imran Khan",
+    dept: "MECH",
+    sem: 4,
+    cgpa: 7.65,
+    attendance: 78,
+  },
+  {
+    slug: "s4",
+    id: "KCGU/24/MBA/0018",
+    name: "Ritika Bose",
+    dept: "MBA",
+    sem: 2,
+    cgpa: 8.92,
+    attendance: 91,
+  },
+  {
+    slug: "s5",
+    id: "KCGU/23/CIVIL/0022",
+    name: "Suresh Babu",
+    dept: "CIVIL",
+    sem: 4,
+    cgpa: 7.41,
+    attendance: 74,
+  },
 ];
 
-export const STUDENT_DETAIL: Record<string, {
-  email: string; phone: string; batch: string; mentor: string; status: string; credits: number; totalCredits: number;
-  transcript: { sem: string; gpa: number; credits: number; status: string }[];
-  courses: { code: string; title: string; faculty: string; grade: string }[];
-  gradeDistribution: { grade: string; count: number }[];
-  timeline: { semester: string; year: string; courses: number; credits: number; status: string }[];
-}> = {
+export const STUDENT_DETAIL: Record<
+  string,
+  {
+    email: string;
+    phone: string;
+    batch: string;
+    mentor: string;
+    status: string;
+    credits: number;
+    totalCredits: number;
+    transcript: { sem: string; gpa: number; credits: number; status: string }[];
+    courses: { code: string; title: string; faculty: string; grade: string }[];
+    gradeDistribution: { grade: string; count: number }[];
+    timeline: {
+      semester: string;
+      year: string;
+      courses: number;
+      credits: number;
+      status: string;
+    }[];
+  }
+> = {
   s0: {
-    email: "ananya.iyer@kcg.edu.in", phone: "+91 98765 43210", batch: "2022–26", mentor: "Dr. Priya Ramanathan", status: "Active · Good Standing", credits: 120, totalCredits: 160,
+    email: "ananya.iyer@kcg.edu.in",
+    phone: "+91 98765 43210",
+    batch: "2022–26",
+    mentor: "Dr. Priya Ramanathan",
+    status: "Active · Good Standing",
+    credits: 120,
+    totalCredits: 160,
     transcript: [
       { sem: "Semester 1", gpa: 8.4, credits: 22, status: "Completed" },
       { sem: "Semester 2", gpa: 8.6, credits: 22, status: "Completed" },
       { sem: "Semester 3", gpa: 8.9, credits: 24, status: "Completed" },
       { sem: "Semester 4", gpa: 8.7, credits: 24, status: "Completed" },
       { sem: "Semester 5", gpa: 8.8, credits: 28, status: "Completed" },
-      { sem: "Semester 6", gpa: 0,   credits: 0,  status: "Ongoing"   },
+      { sem: "Semester 6", gpa: 0, credits: 0, status: "Ongoing" },
     ],
     courses: [
-      { code: "CSE301", title: "Data Structures",  faculty: "Dr. Priya Ramanathan", grade: "A" },
-      { code: "CSE305", title: "DBMS",             faculty: "Prof. Arjun Krishnan",  grade: "A+" },
-      { code: "CSE402", title: "AI",               faculty: "Dr. Meera Subramanian", grade: "A" },
-      { code: "CSE304", title: "Operating Systems",faculty: "Dr. Karthik Venkatesan",grade: "B+" },
+      { code: "CSE301", title: "Data Structures", faculty: "Dr. Priya Ramanathan", grade: "A" },
+      { code: "CSE305", title: "DBMS", faculty: "Prof. Arjun Krishnan", grade: "A+" },
+      { code: "CSE402", title: "AI", faculty: "Dr. Meera Subramanian", grade: "A" },
+      {
+        code: "CSE304",
+        title: "Operating Systems",
+        faculty: "Dr. Karthik Venkatesan",
+        grade: "B+",
+      },
     ],
-    gradeDistribution: [{ grade:"A+",count:8 },{ grade:"A",count:12 },{ grade:"B+",count:5 },{ grade:"B",count:2 },{ grade:"C",count:1 }],
+    gradeDistribution: [
+      { grade: "A+", count: 8 },
+      { grade: "A", count: 12 },
+      { grade: "B+", count: 5 },
+      { grade: "B", count: 2 },
+      { grade: "C", count: 1 },
+    ],
     timeline: [
-      { semester:"Semester 1",year:"2022–23",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 2",year:"2022–23",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 3",year:"2023–24",courses:7,credits:24,status:"Completed" },
-      { semester:"Semester 4",year:"2023–24",courses:7,credits:24,status:"Completed" },
-      { semester:"Semester 5",year:"2024–25",courses:8,credits:28,status:"Completed" },
-      { semester:"Semester 6",year:"2025–26",courses:6,credits:0, status:"Ongoing"   },
+      { semester: "Semester 1", year: "2022–23", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 2", year: "2022–23", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 3", year: "2023–24", courses: 7, credits: 24, status: "Completed" },
+      { semester: "Semester 4", year: "2023–24", courses: 7, credits: 24, status: "Completed" },
+      { semester: "Semester 5", year: "2024–25", courses: 8, credits: 28, status: "Completed" },
+      { semester: "Semester 6", year: "2025–26", courses: 6, credits: 0, status: "Ongoing" },
     ],
   },
   s1: {
-    email: "rahul.verma@kcg.edu.in", phone: "+91 91234 56789", batch: "2022–26", mentor: "Dr. Priya Ramanathan", status: "Active", credits: 108, totalCredits: 160,
+    email: "rahul.verma@kcg.edu.in",
+    phone: "+91 91234 56789",
+    batch: "2022–26",
+    mentor: "Dr. Priya Ramanathan",
+    status: "Active",
+    credits: 108,
+    totalCredits: 160,
     transcript: [
       { sem: "Semester 1", gpa: 7.9, credits: 22, status: "Completed" },
       { sem: "Semester 2", gpa: 8.1, credits: 22, status: "Completed" },
       { sem: "Semester 3", gpa: 8.2, credits: 24, status: "Completed" },
       { sem: "Semester 4", gpa: 8.0, credits: 24, status: "Completed" },
       { sem: "Semester 5", gpa: 8.3, credits: 16, status: "Completed" },
-      { sem: "Semester 6", gpa: 0,   credits: 0,  status: "Ongoing"   },
+      { sem: "Semester 6", gpa: 0, credits: 0, status: "Ongoing" },
     ],
     courses: [
-      { code: "CSE301", title: "Data Structures",  faculty: "Dr. Priya Ramanathan", grade: "A" },
-      { code: "CSE305", title: "DBMS",             faculty: "Prof. Arjun Krishnan",  grade: "A" },
-      { code: "CSE402", title: "AI",               faculty: "Dr. Meera Subramanian", grade: "B+" },
-      { code: "CSE304", title: "Operating Systems",faculty: "Dr. Karthik Venkatesan",grade: "B+" },
+      { code: "CSE301", title: "Data Structures", faculty: "Dr. Priya Ramanathan", grade: "A" },
+      { code: "CSE305", title: "DBMS", faculty: "Prof. Arjun Krishnan", grade: "A" },
+      { code: "CSE402", title: "AI", faculty: "Dr. Meera Subramanian", grade: "B+" },
+      {
+        code: "CSE304",
+        title: "Operating Systems",
+        faculty: "Dr. Karthik Venkatesan",
+        grade: "B+",
+      },
     ],
-    gradeDistribution: [{ grade:"A+",count:3 },{ grade:"A",count:10 },{ grade:"B+",count:9 },{ grade:"B",count:4 },{ grade:"C",count:2 }],
+    gradeDistribution: [
+      { grade: "A+", count: 3 },
+      { grade: "A", count: 10 },
+      { grade: "B+", count: 9 },
+      { grade: "B", count: 4 },
+      { grade: "C", count: 2 },
+    ],
     timeline: [
-      { semester:"Semester 1",year:"2022–23",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 2",year:"2022–23",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 3",year:"2023–24",courses:7,credits:24,status:"Completed" },
-      { semester:"Semester 4",year:"2023–24",courses:7,credits:24,status:"Completed" },
-      { semester:"Semester 5",year:"2024–25",courses:5,credits:16,status:"Completed" },
-      { semester:"Semester 6",year:"2025–26",courses:6,credits:0, status:"Ongoing"   },
+      { semester: "Semester 1", year: "2022–23", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 2", year: "2022–23", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 3", year: "2023–24", courses: 7, credits: 24, status: "Completed" },
+      { semester: "Semester 4", year: "2023–24", courses: 7, credits: 24, status: "Completed" },
+      { semester: "Semester 5", year: "2024–25", courses: 5, credits: 16, status: "Completed" },
+      { semester: "Semester 6", year: "2025–26", courses: 6, credits: 0, status: "Ongoing" },
     ],
   },
   s2: {
-    email: "priya.nair@kcg.edu.in", phone: "+91 99887 76655", batch: "2022–26", mentor: "Prof. Anjali Mehta", status: "Active · Honours", credits: 126, totalCredits: 160,
+    email: "priya.nair@kcg.edu.in",
+    phone: "+91 99887 76655",
+    batch: "2022–26",
+    mentor: "Prof. Anjali Mehta",
+    status: "Active · Honours",
+    credits: 126,
+    totalCredits: 160,
     transcript: [
       { sem: "Semester 1", gpa: 9.1, credits: 22, status: "Completed" },
       { sem: "Semester 2", gpa: 9.0, credits: 22, status: "Completed" },
       { sem: "Semester 3", gpa: 9.2, credits: 24, status: "Completed" },
       { sem: "Semester 4", gpa: 8.9, credits: 24, status: "Completed" },
       { sem: "Semester 5", gpa: 9.1, credits: 34, status: "Completed" },
-      { sem: "Semester 6", gpa: 0,   credits: 0,  status: "Ongoing"   },
+      { sem: "Semester 6", gpa: 0, credits: 0, status: "Ongoing" },
     ],
     courses: [
-      { code: "ECE401", title: "VLSI Design",      faculty: "Prof. Anjali Mehta",   grade: "A+" },
-      { code: "ECE405", title: "Signal Processing", faculty: "Dr. Rajan Kumar",      grade: "A+" },
-      { code: "ECE307", title: "Microprocessors",   faculty: "Dr. Sunita Pillai",    grade: "A"  },
+      { code: "ECE401", title: "VLSI Design", faculty: "Prof. Anjali Mehta", grade: "A+" },
+      { code: "ECE405", title: "Signal Processing", faculty: "Dr. Rajan Kumar", grade: "A+" },
+      { code: "ECE307", title: "Microprocessors", faculty: "Dr. Sunita Pillai", grade: "A" },
     ],
-    gradeDistribution: [{ grade:"A+",count:14 },{ grade:"A",count:9 },{ grade:"B+",count:3 },{ grade:"B",count:1 },{ grade:"C",count:0 }],
+    gradeDistribution: [
+      { grade: "A+", count: 14 },
+      { grade: "A", count: 9 },
+      { grade: "B+", count: 3 },
+      { grade: "B", count: 1 },
+      { grade: "C", count: 0 },
+    ],
     timeline: [
-      { semester:"Semester 1",year:"2022–23",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 2",year:"2022–23",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 3",year:"2023–24",courses:7,credits:24,status:"Completed" },
-      { semester:"Semester 4",year:"2023–24",courses:7,credits:24,status:"Completed" },
-      { semester:"Semester 5",year:"2024–25",courses:9,credits:34,status:"Completed" },
-      { semester:"Semester 6",year:"2025–26",courses:6,credits:0, status:"Ongoing"   },
+      { semester: "Semester 1", year: "2022–23", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 2", year: "2022–23", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 3", year: "2023–24", courses: 7, credits: 24, status: "Completed" },
+      { semester: "Semester 4", year: "2023–24", courses: 7, credits: 24, status: "Completed" },
+      { semester: "Semester 5", year: "2024–25", courses: 9, credits: 34, status: "Completed" },
+      { semester: "Semester 6", year: "2025–26", courses: 6, credits: 0, status: "Ongoing" },
     ],
   },
   s3: {
-    email: "imran.khan@kcg.edu.in", phone: "+91 97654 32109", batch: "2023–27", mentor: "Dr. Sameer Rao", status: "Active", credits: 70, totalCredits: 160,
+    email: "imran.khan@kcg.edu.in",
+    phone: "+91 97654 32109",
+    batch: "2023–27",
+    mentor: "Dr. Sameer Rao",
+    status: "Active",
+    credits: 70,
+    totalCredits: 160,
     transcript: [
       { sem: "Semester 1", gpa: 7.5, credits: 22, status: "Completed" },
       { sem: "Semester 2", gpa: 7.6, credits: 22, status: "Completed" },
       { sem: "Semester 3", gpa: 7.8, credits: 26, status: "Completed" },
-      { sem: "Semester 4", gpa: 0,   credits: 0,  status: "Ongoing"   },
+      { sem: "Semester 4", gpa: 0, credits: 0, status: "Ongoing" },
     ],
     courses: [
-      { code: "ME301", title: "Thermodynamics",   faculty: "Dr. Sameer Rao",     grade: "B+" },
-      { code: "ME305", title: "Fluid Mechanics",  faculty: "Prof. Dinesh Patil", grade: "B"  },
-      { code: "ME401", title: "Machine Design",   faculty: "Dr. Rekha Shah",     grade: "A"  },
+      { code: "ME301", title: "Thermodynamics", faculty: "Dr. Sameer Rao", grade: "B+" },
+      { code: "ME305", title: "Fluid Mechanics", faculty: "Prof. Dinesh Patil", grade: "B" },
+      { code: "ME401", title: "Machine Design", faculty: "Dr. Rekha Shah", grade: "A" },
     ],
-    gradeDistribution: [{ grade:"A+",count:1 },{ grade:"A",count:5 },{ grade:"B+",count:8 },{ grade:"B",count:7 },{ grade:"C",count:3 }],
+    gradeDistribution: [
+      { grade: "A+", count: 1 },
+      { grade: "A", count: 5 },
+      { grade: "B+", count: 8 },
+      { grade: "B", count: 7 },
+      { grade: "C", count: 3 },
+    ],
     timeline: [
-      { semester:"Semester 1",year:"2023–24",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 2",year:"2023–24",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 3",year:"2024–25",courses:7,credits:26,status:"Completed" },
-      { semester:"Semester 4",year:"2024–25",courses:6,credits:0, status:"Ongoing"   },
+      { semester: "Semester 1", year: "2023–24", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 2", year: "2023–24", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 3", year: "2024–25", courses: 7, credits: 26, status: "Completed" },
+      { semester: "Semester 4", year: "2024–25", courses: 6, credits: 0, status: "Ongoing" },
     ],
   },
   s4: {
-    email: "ritika.bose@kcg.edu.in", phone: "+91 98001 12345", batch: "2024–26", mentor: "Prof. Nandini Gupta", status: "Active · Good Standing", credits: 44, totalCredits: 80,
+    email: "ritika.bose@kcg.edu.in",
+    phone: "+91 98001 12345",
+    batch: "2024–26",
+    mentor: "Prof. Nandini Gupta",
+    status: "Active · Good Standing",
+    credits: 44,
+    totalCredits: 80,
     transcript: [
       { sem: "Semester 1", gpa: 8.8, credits: 22, status: "Completed" },
       { sem: "Semester 2", gpa: 9.0, credits: 22, status: "Completed" },
-      { sem: "Semester 3", gpa: 0,   credits: 0,  status: "Ongoing"   },
+      { sem: "Semester 3", gpa: 0, credits: 0, status: "Ongoing" },
     ],
     courses: [
-      { code: "MBA201", title: "Marketing Management", faculty: "Prof. Nandini Gupta", grade: "A+" },
-      { code: "MBA205", title: "Financial Accounting",  faculty: "Dr. Prakash Iyer",    grade: "A"  },
-      { code: "MBA301", title: "Operations Research",   faculty: "Dr. Leela Nair",      grade: "A"  },
+      {
+        code: "MBA201",
+        title: "Marketing Management",
+        faculty: "Prof. Nandini Gupta",
+        grade: "A+",
+      },
+      { code: "MBA205", title: "Financial Accounting", faculty: "Dr. Prakash Iyer", grade: "A" },
+      { code: "MBA301", title: "Operations Research", faculty: "Dr. Leela Nair", grade: "A" },
     ],
-    gradeDistribution: [{ grade:"A+",count:6 },{ grade:"A",count:8 },{ grade:"B+",count:4 },{ grade:"B",count:0 },{ grade:"C",count:0 }],
+    gradeDistribution: [
+      { grade: "A+", count: 6 },
+      { grade: "A", count: 8 },
+      { grade: "B+", count: 4 },
+      { grade: "B", count: 0 },
+      { grade: "C", count: 0 },
+    ],
     timeline: [
-      { semester:"Semester 1",year:"2024–25",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 2",year:"2024–25",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 3",year:"2025–26",courses:5,credits:0, status:"Ongoing"   },
+      { semester: "Semester 1", year: "2024–25", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 2", year: "2024–25", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 3", year: "2025–26", courses: 5, credits: 0, status: "Ongoing" },
     ],
   },
   s5: {
-    email: "suresh.babu@kcg.edu.in", phone: "+91 96321 54780", batch: "2023–27", mentor: "Prof. Vijay Kumar", status: "Active · Warning", credits: 66, totalCredits: 160,
+    email: "suresh.babu@kcg.edu.in",
+    phone: "+91 96321 54780",
+    batch: "2023–27",
+    mentor: "Prof. Vijay Kumar",
+    status: "Active · Warning",
+    credits: 66,
+    totalCredits: 160,
     transcript: [
       { sem: "Semester 1", gpa: 7.2, credits: 20, status: "Completed" },
       { sem: "Semester 2", gpa: 7.0, credits: 22, status: "Completed" },
       { sem: "Semester 3", gpa: 7.6, credits: 24, status: "Completed" },
-      { sem: "Semester 4", gpa: 0,   credits: 0,  status: "Ongoing"   },
+      { sem: "Semester 4", gpa: 0, credits: 0, status: "Ongoing" },
     ],
     courses: [
-      { code: "CE301", title: "Structural Analysis",  faculty: "Prof. Vijay Kumar",  grade: "B+" },
-      { code: "CE305", title: "Geotechnical Engg",    faculty: "Dr. Kavitha Menon",  grade: "B"  },
-      { code: "CE401", title: "Transportation Engg",  faculty: "Dr. Mohan Reddy",    grade: "B+" },
+      { code: "CE301", title: "Structural Analysis", faculty: "Prof. Vijay Kumar", grade: "B+" },
+      { code: "CE305", title: "Geotechnical Engg", faculty: "Dr. Kavitha Menon", grade: "B" },
+      { code: "CE401", title: "Transportation Engg", faculty: "Dr. Mohan Reddy", grade: "B+" },
     ],
-    gradeDistribution: [{ grade:"A+",count:0 },{ grade:"A",count:4 },{ grade:"B+",count:9 },{ grade:"B",count:9 },{ grade:"C",count:2 }],
+    gradeDistribution: [
+      { grade: "A+", count: 0 },
+      { grade: "A", count: 4 },
+      { grade: "B+", count: 9 },
+      { grade: "B", count: 9 },
+      { grade: "C", count: 2 },
+    ],
     timeline: [
-      { semester:"Semester 1",year:"2023–24",courses:5,credits:20,status:"Completed" },
-      { semester:"Semester 2",year:"2023–24",courses:6,credits:22,status:"Completed" },
-      { semester:"Semester 3",year:"2024–25",courses:7,credits:24,status:"Completed" },
-      { semester:"Semester 4",year:"2024–25",courses:6,credits:0, status:"Ongoing"   },
+      { semester: "Semester 1", year: "2023–24", courses: 5, credits: 20, status: "Completed" },
+      { semester: "Semester 2", year: "2023–24", courses: 6, credits: 22, status: "Completed" },
+      { semester: "Semester 3", year: "2024–25", courses: 7, credits: 24, status: "Completed" },
+      { semester: "Semester 4", year: "2024–25", courses: 6, credits: 0, status: "Ongoing" },
     ],
   },
 };
 
 export const EXAM_SCHEDULE = [
-  { id: "ex1", course: "CSE301 · Data Structures", date: "28 Jun 2026", session: "FN", hall: "A-201", invigilator: "Dr. Suresh" },
-  { id: "ex2", course: "CSE305 · DBMS", date: "30 Jun 2026", session: "AN", hall: "B-104", invigilator: "Prof. Latha" },
-  { id: "ex3", course: "CSE402 · AI", date: "03 Jul 2026", session: "FN", hall: "A-105", invigilator: "Dr. Joseph" },
-  { id: "ex4", course: "CSE304 · OS", date: "05 Jul 2026", session: "AN", hall: "C-301", invigilator: "Dr. Anita" },
+  {
+    id: "ex1",
+    course: "CSE301 · Data Structures",
+    date: "28 Jun 2026",
+    session: "FN",
+    hall: "A-201",
+    invigilator: "Dr. Suresh",
+  },
+  {
+    id: "ex2",
+    course: "CSE305 · DBMS",
+    date: "30 Jun 2026",
+    session: "AN",
+    hall: "B-104",
+    invigilator: "Prof. Latha",
+  },
+  {
+    id: "ex3",
+    course: "CSE402 · AI",
+    date: "03 Jul 2026",
+    session: "FN",
+    hall: "A-105",
+    invigilator: "Dr. Joseph",
+  },
+  {
+    id: "ex4",
+    course: "CSE304 · OS",
+    date: "05 Jul 2026",
+    session: "AN",
+    hall: "C-301",
+    invigilator: "Dr. Anita",
+  },
 ];
 
+export const CONTENT_PREVIEW_DEFAULTS = {
+  PDF: "/demo/trees-lab-manual.pdf",
+  Video: "/demo/dbms-walkthrough.mp4",
+} as const;
+
 export const CONTENT_ITEMS = [
-  { id: "c1", title: "DS · Unit 3 Lecture Slides", type: "PPT", status: "Published", updated: "12 Jun", version: "v3.0" },
-  { id: "c2", title: "DBMS · Normalization Walkthrough", type: "Video", status: "Review", updated: "13 Jun", version: "v2.1" },
-  { id: "c3", title: "AI · Reinforcement Learning Notes", type: "PDF", status: "Draft", updated: "14 Jun", version: "v1.0" },
-  { id: "c4", title: "OS · Scheduling SCORM Module", type: "SCORM", status: "Published", updated: "10 Jun", version: "v2.0" },
-  { id: "c5", title: "DS · Trees Lab Manual", type: "PDF", status: "Review", updated: "15 Jun", version: "v1.2" },
+  {
+    id: "c1",
+    title: "DS · Unit 3 Lecture Slides",
+    type: "PPT",
+    status: "Published",
+    updated: "12 Jun",
+    version: "v3.0",
+    course: "CSE301 · Data Structures",
+    author: "Dr. Priya Ramanathan",
+    fileName: "ds-unit3-trees-slides.pptx",
+    fileSize: "4.8 MB",
+    description: "Lecture slides covering binary trees, BST operations, and AVL balancing.",
+  },
+  {
+    id: "c2",
+    title: "DBMS · Normalization Walkthrough",
+    type: "Video",
+    status: "Review",
+    updated: "13 Jun",
+    version: "v2.1",
+    course: "CSE305 · DBMS",
+    author: "Prof. Latha Krishnan",
+    fileName: "dbms-normalization-walkthrough.mp4",
+    fileSize: "128 MB",
+    description: "Screen-recorded lecture demonstrating 1NF through BCNF with worked examples.",
+    previewUrl: CONTENT_PREVIEW_DEFAULTS.Video,
+  },
+  {
+    id: "c3",
+    title: "AI · Reinforcement Learning Notes",
+    type: "PDF",
+    status: "Draft",
+    updated: "14 Jun",
+    version: "v1.0",
+    course: "CSE402 · Artificial Intelligence",
+    author: "Dr. Joseph Thomas",
+    fileName: "ai-rl-notes.pdf",
+    fileSize: "2.1 MB",
+    description: "Draft reading material on MDPs, Q-learning, and policy gradients.",
+    previewUrl: CONTENT_PREVIEW_DEFAULTS.PDF,
+  },
+  {
+    id: "c4",
+    title: "OS · Scheduling SCORM Module",
+    type: "SCORM",
+    status: "Published",
+    updated: "10 Jun",
+    version: "v2.0",
+    course: "CSE304 · Operating Systems",
+    author: "Dr. Anita Desai",
+    fileName: "os-scheduling-module.zip",
+    fileSize: "18 MB",
+    description: "Interactive SCORM package for CPU scheduling algorithms.",
+  },
+  {
+    id: "c5",
+    title: "DS · Trees Lab Manual",
+    type: "PDF",
+    status: "Review",
+    updated: "15 Jun",
+    version: "v1.2",
+    course: "CSE301 · Data Structures",
+    author: "Dr. Priya Ramanathan",
+    fileName: "ds-trees-lab-manual.pdf",
+    fileSize: "1.4 MB",
+    description: "Lab manual with tree traversal exercises and evaluation rubric.",
+    previewUrl: CONTENT_PREVIEW_DEFAULTS.PDF,
+  },
 ];
 
 export const QUESTION_BANK = [
@@ -444,10 +812,34 @@ export const QUESTION_BANK = [
 ];
 
 export const SUBMISSIONS_TO_GRADE = [
-  { id: "s1", student: "Ananya Iyer", assignment: "LRU Cache", submitted: "23 Jun", status: "Pending" },
-  { id: "s2", student: "Rahul Verma", assignment: "LRU Cache", submitted: "23 Jun", status: "Pending" },
-  { id: "s3", student: "Priya Nair", assignment: "ER Diagram", submitted: "22 Jun", status: "Graded" },
-  { id: "s4", student: "Imran Khan", assignment: "Min-Max Tree", submitted: "21 Jun", status: "Pending" },
+  {
+    id: "s1",
+    student: "Ananya Iyer",
+    assignment: "LRU Cache",
+    submitted: "23 Jun",
+    status: "Pending",
+  },
+  {
+    id: "s2",
+    student: "Rahul Verma",
+    assignment: "LRU Cache",
+    submitted: "23 Jun",
+    status: "Pending",
+  },
+  {
+    id: "s3",
+    student: "Priya Nair",
+    assignment: "ER Diagram",
+    submitted: "22 Jun",
+    status: "Graded",
+  },
+  {
+    id: "s4",
+    student: "Imran Khan",
+    assignment: "Min-Max Tree",
+    submitted: "21 Jun",
+    status: "Pending",
+  },
 ];
 
 export const STAFF_TASKS = [
@@ -462,17 +854,34 @@ export const STAFF_TASKS = [
 // --- AI features ---
 
 export const INTERVIEW_QA = [
-  { q: "Walk me through the difference between a process and a thread.", a: "Discussed PCB, address space sharing, context-switch cost." },
-  { q: "Design a URL shortener at 100M req/day.", a: "Covered base62, sharded KV, cache layer, write-through pattern." },
-  { q: "Tell me about a conflict you resolved in a team project.", a: "STAR format response on the inter-club fest planning." },
+  {
+    q: "Walk me through the difference between a process and a thread.",
+    a: "Discussed PCB, address space sharing, context-switch cost.",
+  },
+  {
+    q: "Design a URL shortener at 100M req/day.",
+    a: "Covered base62, sharded KV, cache layer, write-through pattern.",
+  },
+  {
+    q: "Tell me about a conflict you resolved in a team project.",
+    a: "STAR format response on the inter-club fest planning.",
+  },
 ];
 
 export const MEETING_TRANSCRIPT = [
   { t: "00:02", speaker: "Dean", text: "Let's review the mid-semester academic calendar updates." },
   { t: "00:18", speaker: "Registrar", text: "Exam window is locked between June 28 and July 8." },
-  { t: "00:41", speaker: "HoD CSE", text: "We need an extra lab slot for AI – proposing Thursday 4 PM." },
+  {
+    t: "00:41",
+    speaker: "HoD CSE",
+    text: "We need an extra lab slot for AI – proposing Thursday 4 PM.",
+  },
   { t: "01:05", speaker: "Dean", text: "Approved. Please publish via the LMS by tomorrow." },
-  { t: "01:24", speaker: "Registrar", text: "Hall tickets will auto-generate after attendance freeze on the 26th." },
+  {
+    t: "01:24",
+    speaker: "Registrar",
+    text: "Hall tickets will auto-generate after attendance freeze on the 26th.",
+  },
 ];
 
 export const PROCTOR_FEED = [
@@ -514,33 +923,159 @@ export const STUDENT_FEES = {
     { id: "f5", item: "Development Fee", amount: 7000, paid: 0, status: "Pending" as const },
   ],
   history: [
-    { id: "h1", date: "12 Jan 2026", description: "Tuition Fee — Sem 6", amount: 60000, method: "UPI", ref: "TXN20260112A" },
-    { id: "h2", date: "15 Jul 2025", description: "Tuition Fee — Sem 5", amount: 60000, method: "Net Banking", ref: "TXN20250715B" },
-    { id: "h3", date: "20 Aug 2025", description: "Hostel Fee — Annual", amount: 22000, method: "Card", ref: "TXN20250820C" },
-    { id: "h4", date: "10 Jan 2025", description: "Tuition Fee — Sem 4", amount: 60000, method: "UPI", ref: "TXN20250110D" },
+    {
+      id: "h1",
+      date: "12 Jan 2026",
+      description: "Tuition Fee — Sem 6",
+      amount: 60000,
+      method: "UPI",
+      ref: "TXN20260112A",
+    },
+    {
+      id: "h2",
+      date: "15 Jul 2025",
+      description: "Tuition Fee — Sem 5",
+      amount: 60000,
+      method: "Net Banking",
+      ref: "TXN20250715B",
+    },
+    {
+      id: "h3",
+      date: "20 Aug 2025",
+      description: "Hostel Fee — Annual",
+      amount: 22000,
+      method: "Card",
+      ref: "TXN20250820C",
+    },
+    {
+      id: "h4",
+      date: "10 Jan 2025",
+      description: "Tuition Fee — Sem 4",
+      amount: 60000,
+      method: "UPI",
+      ref: "TXN20250110D",
+    },
   ],
 };
 
 // --- Faculty directory & assignments ---
 
 export const FACULTY_DIRECTORY = [
-  { id: "fac1", name: "Dr. Priya Ramanathan", dept: "CSE", specialization: "Data Structures & Algorithms", load: 18, maxLoad: 22 },
-  { id: "fac2", name: "Prof. Arjun Krishnan", dept: "CSE", specialization: "Database Systems", load: 16, maxLoad: 22 },
-  { id: "fac3", name: "Dr. Meera Subramanian", dept: "CSE", specialization: "Artificial Intelligence", load: 14, maxLoad: 20 },
-  { id: "fac4", name: "Dr. Karthik Venkatesan", dept: "CSE", specialization: "Operating Systems", load: 20, maxLoad: 22 },
-  { id: "fac5", name: "Dr. Suresh Menon", dept: "ECE", specialization: "VLSI Design", load: 12, maxLoad: 20 },
-  { id: "fac6", name: "Prof. Latha Iyer", dept: "ECE", specialization: "Signal Processing", load: 16, maxLoad: 22 },
-  { id: "fac7", name: "Dr. Joseph Thomas", dept: "MBA", specialization: "Finance & Analytics", load: 10, maxLoad: 18 },
-  { id: "fac8", name: "Dr. Anita Desai", dept: "CSE", specialization: "Computer Networks", load: 14, maxLoad: 20 },
+  {
+    id: "fac1",
+    name: "Dr. Priya Ramanathan",
+    dept: "CSE",
+    specialization: "Data Structures & Algorithms",
+    load: 18,
+    maxLoad: 22,
+  },
+  {
+    id: "fac2",
+    name: "Prof. Arjun Krishnan",
+    dept: "CSE",
+    specialization: "Database Systems",
+    load: 16,
+    maxLoad: 22,
+  },
+  {
+    id: "fac3",
+    name: "Dr. Meera Subramanian",
+    dept: "CSE",
+    specialization: "Artificial Intelligence",
+    load: 14,
+    maxLoad: 20,
+  },
+  {
+    id: "fac4",
+    name: "Dr. Karthik Venkatesan",
+    dept: "CSE",
+    specialization: "Operating Systems",
+    load: 20,
+    maxLoad: 22,
+  },
+  {
+    id: "fac5",
+    name: "Dr. Suresh Menon",
+    dept: "ECE",
+    specialization: "VLSI Design",
+    load: 12,
+    maxLoad: 20,
+  },
+  {
+    id: "fac6",
+    name: "Prof. Latha Iyer",
+    dept: "ECE",
+    specialization: "Signal Processing",
+    load: 16,
+    maxLoad: 22,
+  },
+  {
+    id: "fac7",
+    name: "Dr. Joseph Thomas",
+    dept: "MBA",
+    specialization: "Finance & Analytics",
+    load: 10,
+    maxLoad: 18,
+  },
+  {
+    id: "fac8",
+    name: "Dr. Anita Desai",
+    dept: "CSE",
+    specialization: "Computer Networks",
+    load: 14,
+    maxLoad: 20,
+  },
 ];
 
 export const FACULTY_ASSIGNMENTS = [
-  { id: "fa1", faculty: "Dr. Priya Ramanathan", course: "CSE301 · Data Structures", semester: 3, section: "A", hours: 4 },
-  { id: "fa2", faculty: "Prof. Arjun Krishnan", course: "CSE305 · DBMS", semester: 3, section: "A", hours: 4 },
-  { id: "fa3", faculty: "Dr. Meera Subramanian", course: "CSE402 · AI", semester: 5, section: "A", hours: 3 },
-  { id: "fa4", faculty: "Dr. Karthik Venkatesan", course: "CSE304 · OS", semester: 4, section: "B", hours: 4 },
-  { id: "fa5", faculty: "Dr. Suresh Menon", course: "ECE201 · VLSI Design", semester: 5, section: "A", hours: 3 },
-  { id: "fa6", faculty: "Prof. Latha Iyer", course: "ECE102 · Signals", semester: 3, section: "A", hours: 4 },
+  {
+    id: "fa1",
+    faculty: "Dr. Priya Ramanathan",
+    course: "CSE301 · Data Structures",
+    semester: 3,
+    section: "A",
+    hours: 4,
+  },
+  {
+    id: "fa2",
+    faculty: "Prof. Arjun Krishnan",
+    course: "CSE305 · DBMS",
+    semester: 3,
+    section: "A",
+    hours: 4,
+  },
+  {
+    id: "fa3",
+    faculty: "Dr. Meera Subramanian",
+    course: "CSE402 · AI",
+    semester: 5,
+    section: "A",
+    hours: 3,
+  },
+  {
+    id: "fa4",
+    faculty: "Dr. Karthik Venkatesan",
+    course: "CSE304 · OS",
+    semester: 4,
+    section: "B",
+    hours: 4,
+  },
+  {
+    id: "fa5",
+    faculty: "Dr. Suresh Menon",
+    course: "ECE201 · VLSI Design",
+    semester: 5,
+    section: "A",
+    hours: 3,
+  },
+  {
+    id: "fa6",
+    faculty: "Prof. Latha Iyer",
+    course: "ECE102 · Signals",
+    semester: 3,
+    section: "A",
+    hours: 4,
+  },
 ];
 
 // --- Quiz questions for student quiz-taking flow ---
@@ -573,7 +1108,12 @@ export const QUIZ_QUESTIONS = [
   {
     id: "qq5",
     question: "Which sorting algorithm has the best average-case time complexity?",
-    options: ["Bubble Sort — O(n²)", "Merge Sort — O(n log n)", "Selection Sort — O(n²)", "Insertion Sort — O(n²)"],
+    options: [
+      "Bubble Sort — O(n²)",
+      "Merge Sort — O(n log n)",
+      "Selection Sort — O(n²)",
+      "Insertion Sort — O(n²)",
+    ],
     correctAnswer: 1,
   },
 ];
@@ -593,7 +1133,8 @@ export const ENROLLMENT_HISTORY = [
 
 export const STUDENT_CURRICULUM = [
   {
-    semester: 1, courses: [
+    semester: 1,
+    courses: [
       { code: "CSE101", title: "Programming in C", credits: 4, type: "Core" },
       { code: "MAT101", title: "Engineering Mathematics I", credits: 4, type: "Core" },
       { code: "PHY101", title: "Engineering Physics", credits: 3, type: "Core" },
@@ -603,7 +1144,8 @@ export const STUDENT_CURRICULUM = [
     ],
   },
   {
-    semester: 2, courses: [
+    semester: 2,
+    courses: [
       { code: "CSE201", title: "Object-Oriented Programming", credits: 4, type: "Core" },
       { code: "MAT201", title: "Engineering Mathematics II", credits: 4, type: "Core" },
       { code: "CHE201", title: "Engineering Chemistry", credits: 3, type: "Core" },
@@ -613,7 +1155,8 @@ export const STUDENT_CURRICULUM = [
     ],
   },
   {
-    semester: 3, courses: [
+    semester: 3,
+    courses: [
       { code: "CSE301", title: "Data Structures", credits: 4, type: "Core" },
       { code: "CSE302", title: "Digital Logic Design", credits: 3, type: "Core" },
       { code: "MAT301", title: "Discrete Mathematics", credits: 4, type: "Core" },
@@ -624,7 +1167,8 @@ export const STUDENT_CURRICULUM = [
     ],
   },
   {
-    semester: 4, courses: [
+    semester: 4,
+    courses: [
       { code: "CSE401", title: "Design & Analysis of Algorithms", credits: 4, type: "Core" },
       { code: "CSE402", title: "Database Management Systems", credits: 4, type: "Core" },
       { code: "CSE403", title: "Operating Systems", credits: 4, type: "Core" },
@@ -634,7 +1178,8 @@ export const STUDENT_CURRICULUM = [
     ],
   },
   {
-    semester: 5, courses: [
+    semester: 5,
+    courses: [
       { code: "CSE501", title: "Computer Networks", credits: 4, type: "Core" },
       { code: "CSE502", title: "Software Engineering", credits: 3, type: "Core" },
       { code: "CSE503", title: "Theory of Computation", credits: 3, type: "Core" },
@@ -643,7 +1188,8 @@ export const STUDENT_CURRICULUM = [
     ],
   },
   {
-    semester: 6, courses: [
+    semester: 6,
+    courses: [
       { code: "CSE601", title: "Data Structures (Advanced)", credits: 4, type: "Core" },
       { code: "CSE602", title: "DBMS (Advanced)", credits: 4, type: "Core" },
       { code: "CSE603", title: "Artificial Intelligence", credits: 3, type: "Core" },
@@ -652,7 +1198,8 @@ export const STUDENT_CURRICULUM = [
     ],
   },
   {
-    semester: 7, courses: [
+    semester: 7,
+    courses: [
       { code: "CSE701", title: "Compiler Design", credits: 4, type: "Core" },
       { code: "CSE702", title: "Information Security", credits: 3, type: "Core" },
       { code: "CSE703", title: "Deep Learning", credits: 3, type: "Elective" },
@@ -661,7 +1208,8 @@ export const STUDENT_CURRICULUM = [
     ],
   },
   {
-    semester: 8, courses: [
+    semester: 8,
+    courses: [
       { code: "CSE801", title: "Project Work", credits: 10, type: "Core" },
       { code: "CSE802", title: "Comprehensive Viva", credits: 2, type: "Core" },
       { code: "CSE803", title: "Blockchain & Web3", credits: 3, type: "Elective" },

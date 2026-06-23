@@ -50,7 +50,7 @@ const NAV: NavItem[] = [
     icon: ShieldCheck,
     external: true,
   },
-  { label: "AI Features", to: "/ai/interview", icon: Sparkles },
+  { label: "AI Smart Features", to: "/ai/interview", icon: Sparkles },
 ];
 
 function AdminLayout() {
